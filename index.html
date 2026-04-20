@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Benjamin Schaar — CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  :root {
+    --bg:         #0a0e14;
+    --bg-hero:    #060910;
+    --bg-panel:   #0e131b;
+    --line:       #1a2230;
+    --line-soft:  #141a24;
+    --hair:       rgba(140, 160, 190, 0.08);
+
+    --text:       #dde3ec;
+    --text-soft:  #b4becc;
+    --body:       #9ba6b6;
+    --muted:      #6b7687;
+    --caption:    #525c6b;
+
+    --accent:     #8aa8c8;
+    --accent-soft: rgba(138, 168, 200, 0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    font-feature-settings: "ss01", "cv11", "liga";
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ---------- hero ---------- */
+
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    background: var(--bg-hero);
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+
+  #signals {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: crosshair;
+  }
+
+  /* printed-only static photo; hidden on screen */
+  .hero__photo-print {
+    display: none;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 64px 0 300px;
+    left: 0; right: 0;
+  }
+  .hero__name {
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: -0.028em;
+    line-height: 1.02;
+    color: var(--text);
+    margin-bottom: 12px;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+  }
+  .hero__role {
+    font-family: "JetBrains Mono", "SF Mono", "Courier New", monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .hero__contact {
+    font-family: "JetBrains Mono", "SF Mono", "Courier New", monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 14px;
+    align-items: center;
+    pointer-events: auto;
+  }
+  .hero__contact a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .hero__contact a:hover {
+    color: var(--text-soft);
+    border-bottom-color: var(--muted);
+  }
+  .hero__contact .sep {
+    color: var(--line);
+    user-select: none;
+  }
+
+  .hero__info {
+    position: absolute;
+    bottom: 22px;
+    left: 28px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--caption);
+    pointer-events: none;
+  }
+
+  .hero__listen {
+    position: absolute;
+    bottom: 18px;
+    right: 24px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: rgba(10, 14, 20, 0.6);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    padding: 9px 16px;
+    cursor: pointer;
+    z-index: 10;
+    transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    backdrop-filter: blur(4px);
+  }
+  .hero__listen:hover {
+    color: var(--accent);
+    border-color: var(--accent-soft);
+  }
+  .hero__listen.is-active {
+    color: var(--accent);
+    border-color: var(--accent-soft);
+    background: rgba(138, 168, 200, 0.06);
+  }
+
+  /* soft bottom vignette so text feels anchored */
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 90px;
+    background: linear-gradient(to bottom, rgba(10, 14, 20, 0), rgba(10, 14, 20, 0.9));
+    pointer-events: none;
+  }
+
+  /* ---------- CV container ---------- */
+
+  .cv {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 64px 64px 96px;
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 56px;
+  }
+
+  .section { margin-bottom: 36px; }
+  .section:last-child { margin-bottom: 0; }
+
+  .section__title {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* ---------- sidebar ---------- */
+
+  .sidebar .skill { margin-bottom: 18px; }
+  .sidebar .skill:last-child { margin-bottom: 0; }
+
+  .sidebar .skill__label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-soft);
+    margin-bottom: 6px;
+  }
+  .sidebar .skill__value {
+    font-size: 13px;
+    line-height: 1.62;
+    color: var(--body);
+  }
+
+  .sidebar .lang {
+    font-size: 13px;
+    color: var(--body);
+    line-height: 1.7;
+  }
+  .sidebar .lang b {
+    font-weight: 500;
+    color: var(--text-soft);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    margin-right: 2px;
+  }
+
+  /* ---------- main ---------- */
+
+  .main p {
+    font-size: 14px;
+    line-height: 1.78;
+    color: var(--body);
+  }
+  .main p + p { margin-top: 12px; }
+
+  .generalist {
+    border-left: 1px solid var(--accent-soft);
+    padding: 2px 0 2px 18px;
+    margin-top: 22px;
+    color: var(--text-soft);
+    font-size: 13.5px !important;
+    line-height: 1.78 !important;
+  }
+  .generalist b { font-weight: 600; color: var(--text); }
+
+  .entry { margin-bottom: 26px; }
+  .entry:last-child { margin-bottom: 0; }
+
+  .entry__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 3px;
+  }
+  .entry__title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: var(--text);
+  }
+  .entry__date {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .entry__sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .entry ul { list-style: none; }
+  .entry li {
+    font-size: 13.5px;
+    line-height: 1.66;
+    color: var(--body);
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 5px;
+  }
+  .entry li:last-child { margin-bottom: 0; }
+  .entry li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.75em;
+    width: 8px;
+    height: 1px;
+    background: var(--accent-soft);
+  }
+
+  /* ---------- responsive ---------- */
+
+  @media (max-width: 720px) {
+    .hero { height: 420px; }
+    .hero__overlay {
+      padding: 28px 24px 0 24px;
+      justify-content: flex-start;
+      padding-top: 220px;
+    }
+    .hero__name { font-size: 30px; }
+    .hero__role { font-size: 10px; margin-bottom: 12px; }
+    .hero__contact { font-size: 10px; gap: 0 10px; }
+    .hero__listen { bottom: 14px; right: 14px; padding: 7px 12px; }
+    .hero__info { bottom: 18px; left: 18px; }
+    .cv { padding: 40px 22px 72px; }
+    .body { grid-template-columns: 1fr; gap: 32px; }
+    .entry__head { flex-direction: column; align-items: flex-start; gap: 3px; }
+  }
+
+  /* ---------- print ---------- */
+
+  @media print {
+    @page { margin: 14mm; }
+    html, body {
+      background: #fff !important;
+      color: #1a1a1a !important;
+      font-size: 10.5pt;
+    }
+    .hero {
+      height: auto;
+      background: #fff;
+      border-bottom: 1px solid #d0d0d0;
+      padding: 0 0 14pt;
+      display: flex;
+      align-items: center;
+      gap: 18pt;
+    }
+    .hero::after { display: none; }
+    #signals, .hero__info, .hero__listen { display: none !important; }
+    .hero__photo-print {
+      display: block;
+      width: 78pt;
+      height: 78pt;
+      border-radius: 4px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .hero__overlay {
+      position: static;
+      padding: 0;
+      max-width: none;
+      margin: 0;
+    }
+    .hero__name {
+      color: #000;
+      font-size: 22pt;
+      margin-bottom: 4pt;
+      text-shadow: none;
+    }
+    .hero__role {
+      color: #5a6a7a;
+      margin-bottom: 8pt;
+      letter-spacing: 0.18em;
+    }
+    .hero__contact { color: #555; }
+    .hero__contact .sep { color: #bbb; }
+
+    .cv { padding: 20pt 0 0; }
+    .section__title { color: #6a7a8a; border-bottom-color: #d8d8d8; }
+    .entry__title { color: #000; }
+    .entry__sub, .entry__date { color: #555; }
+    .entry li, .main p, .sidebar .skill__value, .sidebar .lang { color: #222; }
+    .sidebar .skill__label, .sidebar .lang b { color: #000; }
+    .entry li::before { background: #999; }
+    .generalist { border-left-color: #888; color: #1a1a1a; }
+    a { color: inherit; text-decoration: none; border-bottom: none !important; }
+    .section, .entry { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+  <header class="hero">
+    <canvas id="signals" aria-hidden="true"></canvas>
+    <img class="hero__photo-print" src="profile.png" alt="Benjamin Schaar" />
+
+    <div class="hero__overlay">
+      <h1 class="hero__name">Benjamin Schaar</h1>
+      <div class="hero__role">Computational Neuroscience · Creative Technologist</div>
+      <div class="hero__contact">
+        <span>Vienna, Austria</span>
+        <span class="sep">·</span>
+        <span>contact on request</span>
+      </div>
+    </div>
+
+    <div class="hero__info">
+      <span id="hzReadout">—</span> hz &middot; <span id="nodeCount">0</span> nodes
+    </div>
+
+    <button class="hero__listen" id="listenBtn" type="button" aria-label="Toggle ambient audio">
+      <span id="listenLabel">▶ listen</span>
+    </button>
+  </header>
+
+  <main class="cv">
+    <div class="body">
+      <!-- ============== SIDEBAR ============== -->
+      <aside class="sidebar">
+        <section class="section">
+          <h2 class="section__title">Technical Skills</h2>
+
+          <div class="skill">
+            <div class="skill__label">Programming</div>
+            <div class="skill__value">Python, bash, basic HTML &amp; CSS (HTL coursework)</div>
+          </div>
+
+          <div class="skill">
+            <div class="skill__label">Data &amp; ML</div>
+            <div class="skill__value">
+              Computer vision for animal behavior, time-series analysis,
+              machine learning, image processing, statistical modelling of
+              neuronal time-series data
+            </div>
+          </div>
+
+          <div class="skill">
+            <div class="skill__label">Infrastructure</div>
+            <div class="skill__value">Linux/bash, HPC/SLURM, Docker, Git</div>
+          </div>
+
+          <div class="skill">
+            <div class="skill__label">AI &amp; Dev Tools</div>
+            <div class="skill__value">
+              Claude Code CLI (agentic coding), LLM-assisted development,
+              RAG workflows
+            </div>
+          </div>
+
+          <div class="skill">
+            <div class="skill__label">Audio &amp; Creative</div>
+            <div class="skill__value">
+              Cubase, audio signal processing, mixing/mastering, creative
+              coding for audio tools used in my music, projection/visual
+              design for immersive events in Vienna
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section__title">Languages</h2>
+          <div class="lang"><b>German</b> — native</div>
+          <div class="lang"><b>English</b> — proficient (scientific &amp; professional)</div>
+        </section>
+      </aside>
+
+      <!-- ============== MAIN ============== -->
+      <div class="main">
+        <section class="section">
+          <h2 class="section__title">Profile</h2>
+          <p>
+            Neuroscientist (MSc, PhD candidate) in a computational neuroscience
+            lab, spending ~80% of my time on the technical backend: data
+            analysis pipelines, HPC workflows, and scientific tooling in Python
+            and bash. 3+ years implementing machine learning and computer
+            vision libraries for automated processing of animal behavior and
+            neuronal activity, alongside scientific computing workflows and
+            automation tools. Experienced with university cluster computing,
+            image processing, and statistical modelling. Complemented by a
+            background in IT/Media Technology (HTL) and 12 years of music
+            production and audio engineering. Co-founder of Tohuwabohu, a
+            Vienna-based creative collective producing immersive events that
+            combine handcrafted visual design and projection mapping into a
+            holistic sensory experience. Intrigued explorer of modern AI
+            workflows, with a thoughtful approach to implementing them into my
+            own work being aware of both their power and their limitations.
+          </p>
+          <p class="generalist">
+            <b>Technical generalist.</b> Much of my PhD consisted of
+            identifying the next computational problem and exploring the
+            newest available technologies to solve it. Now AI shifts the
+            bottleneck from implementation and skill acquisition to
+            understanding and exploring the cleanest approach to solve the
+            problem. This skill that has become increasingly valuable with
+            the rapid pace of recent AI progress.
+          </p>
+        </section>
+
+        <section class="section">
+          <h2 class="section__title">Experience</h2>
+
+          <div class="entry">
+            <div class="entry__head">
+              <div class="entry__title">
+                PhD Researcher — Computational &amp; Experimental Neuroscience
+              </div>
+              <div class="entry__date">2021 — present</div>
+            </div>
+            <div class="entry__sub">
+              University of Vienna / Medical University of Vienna
+            </div>
+            <ul>
+              <li>Designed and maintained Python-based data analysis pipelines for behavior/neuronal recording datasets</li>
+              <li>Ran computational jobs on university HPC clusters (SLURM), managing batch processing of experimental data</li>
+              <li>Performed statistical modelling and visualization of complex biological data</li>
+              <li>Managed version-controlled codebases and reproducible analysis environments (Git, conda)</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <div class="entry__head">
+              <div class="entry__title">
+                Music Producer &amp; Audio Engineer &amp; Project Mapping
+              </div>
+              <div class="entry__date">2011 — present</div>
+            </div>
+            <div class="entry__sub">Independent</div>
+            <ul>
+              <li>12 years producing electronic music using Cubase and others, with deep knowledge of song writing, synthesis, mixing, and mastering</li>
+              <li>Audio signal processing and sound design — transferable DSP and signal analysis skills</li>
+              <li>Experimented with creative coding for visual work and audio processing.</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <div class="entry__head">
+              <div class="entry__title">
+                Master&rsquo;s Thesis — Computational Neuropharmacology
+              </div>
+              <div class="entry__date">2019 — 2021</div>
+            </div>
+            <div class="entry__sub">
+              Department of Pathobiology of the Nervous System, Medical
+              University of Vienna
+            </div>
+            <ul>
+              <li>Analysed electrophysiology data using custom Python scripts and GraphPad Prism for GABA receptor characterization</li>
+              <li>Performed molecular modelling with LigandScout software for receptor binding analysis</li>
+              <li>Processed and visualized large datasets from voltage-clamp recordings across multiple experimental conditions</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section__title">Education</h2>
+
+          <div class="entry">
+            <div class="entry__head">
+              <div class="entry__title">PhD Candidate — Neuroscience</div>
+              <div class="entry__date">2021 — present</div>
+            </div>
+            <div class="entry__sub">
+              University of Vienna / Medical University of Vienna
+            </div>
+            <ul>
+              <li>Focus: computational analysis of neuronal circuits, Python-based data pipelines, HPC cluster computing</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <div class="entry__head">
+              <div class="entry__title">
+                MSc Molecular Biology (Neuroscience)
+              </div>
+              <div class="entry__date">2014 — 2021</div>
+            </div>
+            <div class="entry__sub">University of Vienna</div>
+            <ul>
+              <li>generall Molecular Biology, Coursework in data analysis (R, Python), proteomics, fluorescence microscopy, cell biology, Neuroscience</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <div class="entry__head">
+              <div class="entry__title">
+                HTL Diploma — Information Technology / Media Technology
+              </div>
+              <div class="entry__date">2007 — 2013</div>
+            </div>
+            <div class="entry__sub">HTL Wien 3 Rennweg</div>
+            <ul>
+              <li>5-year technical diploma: programming fundamentals, software development, media technology, IT infrastructure</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const canvas   = document.getElementById('signals');
+      const ctx      = canvas.getContext('2d');
+      const listenBtn   = document.getElementById('listenBtn');
+      const listenLabel = document.getElementById('listenLabel');
+      const hzEl    = document.getElementById('hzReadout');
+      const nodesEl = document.getElementById('nodeCount');
+
+      let width = 0, height = 0, dpr = 1;
+      let audioCtx = null;
+      let audioActive = false;
+      let nodes = [];
+      let photoNode = null;
+      let mouseX = -1e4, mouseY = -1e4;
+      let photoLoaded = false;
+      const photoImg = new Image();
+
+      // Phrygian scale, A2 base — matches reference "Signals"
+      const scale = [0, 1, 3, 5, 7, 8, 10];
+      const baseFreq = 110;
+
+      const noteToFreq = note => {
+        const octave = Math.floor(note / 7);
+        const deg = note % 7;
+        const semi = scale[deg] + octave * 12;
+        return baseFreq * Math.pow(2, semi / 12);
+      };
+
+      function resize() {
+        dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        width  = rect.width;
+        height = rect.height;
+        canvas.width  = Math.floor(width  * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        if (photoNode) {
+          const narrow = width < 720;
+          photoNode.x = narrow ? width / 2 : Math.min(190, Math.max(140, width * 0.18));
+          photoNode.y = narrow ? 105       : height * 0.5;
+          photoNode.radius = narrow ? 46 : 54;
+        }
+      }
+
+      class PhotoNode {
+        constructor() {
+          this.x = 0;
+          this.y = 0;
+          this.radius = 54;
+          this.pulsePhase = 0;
+          this.lastHit = 0;
+        }
+        update() {
+          this.pulsePhase += 0.014;
+        }
+        draw() {
+          const pulse = 1 + Math.sin(this.pulsePhase) * 0.035;
+          const r = this.radius * pulse;
+          const hitGlow = Math.max(0, 1 - (Date.now() - this.lastHit) / 900);
+
+          // Outer halo
+          const halo = ctx.createRadialGradient(this.x, this.y, r * 0.95, this.x, this.y, r * 2.6);
+          halo.addColorStop(0,   `rgba(138, 168, 200, ${0.22 + hitGlow * 0.28})`);
+          halo.addColorStop(0.55,`rgba(100, 130, 170, ${0.06 + hitGlow * 0.08})`);
+          halo.addColorStop(1,   'rgba(100, 130, 170, 0)');
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, r * 2.6, 0, Math.PI * 2);
+          ctx.fillStyle = halo;
+          ctx.fill();
+
+          // Photo (circular clip)
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+          ctx.closePath();
+          ctx.clip();
+          if (photoLoaded) {
+            const size = r * 2;
+            // preserve aspect — photo is roughly square but we cover
+            const iw = photoImg.naturalWidth;
+            const ih = photoImg.naturalHeight;
+            const scale = Math.max(size / iw, size / ih);
+            const dw = iw * scale;
+            const dh = ih * scale;
+            ctx.drawImage(photoImg, this.x - dw / 2, this.y - dh / 2, dw, dh);
+          } else {
+            ctx.fillStyle = '#141b26';
+            ctx.fillRect(this.x - r, this.y - r, r * 2, r * 2);
+            ctx.fillStyle = '#8aa8c8';
+            ctx.font = '600 20px "JetBrains Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('BS', this.x, this.y);
+          }
+          ctx.restore();
+
+          // Thin ring outline
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, r + 0.5, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(180, 205, 230, ${0.32 + hitGlow * 0.35})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+        onHit() { this.lastHit = Date.now(); }
+      }
+
+      class Node {
+        constructor(x, y) {
+          this.x = x;
+          this.y = y;
+          this.vx = (Math.random() - 0.5) * 0.5;
+          this.vy = (Math.random() - 0.5) * 0.5;
+          this.radius = 1.8 + Math.random() * 2.4;
+          this.note = Math.floor(Math.random() * 21);
+          this.pulsePhase = Math.random() * Math.PI * 2;
+          this.playing = false;
+          this.lastTrigger = 0;
+        }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+
+          // mouse attraction (only when mouse inside hero)
+          const mdx = mouseX - this.x;
+          const mdy = mouseY - this.y;
+          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (mdist < 260 && mdist > 50) {
+            this.vx += mdx / mdist * 0.012;
+            this.vy += mdy / mdist * 0.012;
+          }
+
+          // photo gravity — drift toward & orbit
+          if (photoNode) {
+            const pdx = photoNode.x - this.x;
+            const pdy = photoNode.y - this.y;
+            const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
+            const orbitR = photoNode.radius + 32;
+            if (pdist > orbitR) {
+              this.vx += pdx / pdist * 0.005;
+              this.vy += pdy / pdist * 0.005;
+            } else if (pdist < photoNode.radius + 10) {
+              // soft repulsion so they can't sit inside the photo
+              this.vx -= pdx / pdist * 0.09;
+              this.vy -= pdy / pdist * 0.09;
+            }
+          }
+
+          // boundaries
+          if (this.x < 30) this.vx += 0.03;
+          if (this.x > width  - 30) this.vx -= 0.03;
+          if (this.y < 24) this.vy += 0.03;
+          if (this.y > height - 24) this.vy -= 0.03;
+
+          // damping
+          this.vx *= 0.985;
+          this.vy *= 0.985;
+
+          this.pulsePhase += 0.02;
+        }
+        draw() {
+          const pulse = 1 + Math.sin(this.pulsePhase) * 0.35;
+          const r = this.radius * pulse;
+
+          const glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 4);
+          glow.addColorStop(0, this.playing
+            ? 'rgba(190, 215, 240, 0.5)'
+            : 'rgba(110, 140, 180, 0.22)');
+          glow.addColorStop(1, 'rgba(110, 140, 180, 0)');
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, r * 4, 0, Math.PI * 2);
+          ctx.fillStyle = glow;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = this.playing
+            ? 'rgba(210, 225, 245, 0.95)'
+            : 'rgba(135, 160, 190, 0.68)';
+          ctx.fill();
+        }
+        trigger() {
+          if (!audioCtx || !audioActive) return;
+          if (Date.now() - this.lastTrigger < 120) return;
+          this.lastTrigger = Date.now();
+
+          const osc    = audioCtx.createOscillator();
+          const gain   = audioCtx.createGain();
+          const filter = audioCtx.createBiquadFilter();
+
+          osc.type = 'sine';
+          osc.frequency.value = noteToFreq(this.note);
+          filter.type = 'lowpass';
+          filter.frequency.value = 1800 + Math.random() * 2200;
+          filter.Q.value = 1;
+
+          const now = audioCtx.currentTime;
+          gain.gain.setValueAtTime(0, now);
+          gain.gain.linearRampToValueAtTime(0.06, now + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(now + 1.8);
+
+          this.playing = true;
+          setTimeout(() => { this.playing = false; }, 220);
+
+          hzEl.textContent = Math.round(noteToFreq(this.note));
+        }
+      }
+
+      function init() {
+        photoNode = new PhotoNode();
+        nodes = [];
+        // denser around the right half so they drift into the text + back
+        const count = 34;
+        for (let i = 0; i < count; i++) {
+          nodes.push(new Node(
+            60 + Math.random() * (width  - 120),
+            30 + Math.random() * (height - 60),
+          ));
+        }
+        resize();
+      }
+
+      function drawConnections() {
+        const thr = 140;
+        const photoThr = 130;
+
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[i].x - nodes[j].x;
+            const dy = nodes[i].y - nodes[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < thr) {
+              const alpha = (1 - dist / thr) * 0.22;
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.strokeStyle = `rgba(120, 150, 185, ${alpha})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+
+              if (dist < 38 && audioActive && Math.random() < 0.008) {
+                nodes[Math.random() > 0.5 ? i : j].trigger();
+              }
+            }
+          }
+        }
+
+        if (photoNode) {
+          for (const n of nodes) {
+            const dx = photoNode.x - n.x;
+            const dy = photoNode.y - n.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const edge = dist - photoNode.radius;
+            if (edge < photoThr && edge > 0) {
+              const alpha = (1 - edge / photoThr) * 0.55;
+              const ex = photoNode.x - (dx / dist) * photoNode.radius;
+              const ey = photoNode.y - (dy / dist) * photoNode.radius;
+              ctx.beginPath();
+              ctx.moveTo(n.x, n.y);
+              ctx.lineTo(ex, ey);
+              ctx.strokeStyle = `rgba(175, 205, 235, ${alpha})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+
+              if (edge < 28 && audioActive && Math.random() < 0.018) {
+                n.trigger();
+                photoNode.onHit();
+              }
+            }
+          }
+        }
+      }
+
+      function frame() {
+        // subtle motion-blur / fade
+        ctx.fillStyle = 'rgba(6, 9, 16, 0.22)';
+        ctx.fillRect(0, 0, width, height);
+
+        drawConnections();
+        for (const n of nodes) { n.update(); n.draw(); }
+        photoNode && photoNode.update();
+        photoNode && photoNode.draw();
+
+        nodesEl.textContent = nodes.length;
+        requestAnimationFrame(frame);
+      }
+
+      // audio toggle
+      listenBtn.addEventListener('click', () => {
+        if (!audioCtx) {
+          try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          } catch (e) { return; }
+        }
+        audioActive = !audioActive;
+        if (audioActive && audioCtx.state === 'suspended') audioCtx.resume();
+        listenBtn.classList.toggle('is-active', audioActive);
+        listenLabel.textContent = audioActive ? '■ mute' : '▶ listen';
+        if (!audioActive) hzEl.textContent = '—';
+      });
+
+      // pointer tracking
+      canvas.addEventListener('mousemove', e => {
+        const r = canvas.getBoundingClientRect();
+        mouseX = e.clientX - r.left;
+        mouseY = e.clientY - r.top;
+      });
+      canvas.addEventListener('mouseleave', () => { mouseX = -1e4; mouseY = -1e4; });
+
+      // click anywhere on hero → spawn a node (unless on photo)
+      canvas.addEventListener('click', e => {
+        const r = canvas.getBoundingClientRect();
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
+        if (photoNode) {
+          const d = Math.hypot(photoNode.x - x, photoNode.y - y);
+          if (d < photoNode.radius + 16) return;
+        }
+        if (nodes.length >= 70) return;
+        const n = new Node(x, y);
+        nodes.push(n);
+        if (audioActive) n.trigger();
+      });
+
+      window.addEventListener('resize', resize);
+
+      // photo load
+      photoImg.onload  = () => { photoLoaded = true; };
+      photoImg.onerror = () => { photoLoaded = false; };
+      photoImg.src = 'profile.png';
+
+      // boot
+      resize();
+      init();
+      frame();
+    })();
+  </script>
+</body>
+</html>
