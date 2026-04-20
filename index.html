@@ -4,6 +4,26 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Benjamin Schaar — CV</title>
+
+<meta name="description" content="Benjamin Schaar — PhD candidate in computational neuroscience, music producer, and creative technologist based in Vienna. Python data pipelines, HPC workflows, neural time-series analysis." />
+<meta name="theme-color" content="#0a0e14" />
+<link rel="canonical" href="https://benjaminschaar.github.io/" />
+
+<meta property="og:type" content="profile" />
+<meta property="og:url" content="https://benjaminschaar.github.io/" />
+<meta property="og:title" content="Benjamin Schaar — Computational Neuroscience &amp; Creative Technologist" />
+<meta property="og:description" content="PhD candidate in computational neuroscience, music producer, and creative technologist. Vienna, Austria." />
+<meta property="og:image" content="https://benjaminschaar.github.io/profile.png" />
+<meta property="og:image:alt" content="Portrait of Benjamin Schaar" />
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Benjamin Schaar — Computational Neuroscience &amp; Creative Technologist" />
+<meta name="twitter:description" content="PhD candidate in computational neuroscience, music producer, and creative technologist. Vienna, Austria." />
+<meta name="twitter:image" content="https://benjaminschaar.github.io/profile.png" />
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="apple-touch-icon" href="profile.png" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
@@ -407,7 +427,7 @@
       <span id="hzReadout">—</span> hz &middot; <span id="nodeCount">0</span> nodes
     </div>
 
-    <button class="hero__listen" id="listenBtn" type="button" aria-label="Toggle ambient audio">
+    <button class="hero__listen" id="listenBtn" type="button" aria-label="Toggle ambient audio" aria-pressed="false">
       <span id="listenLabel">▶ listen</span>
     </button>
   </header>
@@ -487,11 +507,11 @@
           <p class="generalist">
             <b>Technical generalist.</b> Much of my PhD consisted of
             identifying the next computational problem and exploring the
-            newest available technologies to solve it. Now AI shifts the
-            bottleneck from implementation and skill acquisition to
-            understanding and exploring the cleanest approach to solve the
-            problem. This skill that has become increasingly valuable with
-            the rapid pace of recent AI progress.
+            newest tools to solve it. AI now shifts the bottleneck from
+            implementation and skill acquisition to understanding the
+            problem and choosing the cleanest approach — a skill that has
+            become increasingly valuable with the rapid pace of recent AI
+            progress.
           </p>
         </section>
 
@@ -519,15 +539,15 @@
           <div class="entry">
             <div class="entry__head">
               <div class="entry__title">
-                Music Producer &amp; Audio Engineer &amp; Project Mapping
+                Music Producer, Audio Engineer &amp; Projection Mapping
               </div>
               <div class="entry__date">2011 — present</div>
             </div>
             <div class="entry__sub">Independent</div>
             <ul>
-              <li>12 years producing electronic music using Cubase and others, with deep knowledge of song writing, synthesis, mixing, and mastering</li>
+              <li>15 years producing electronic music using Cubase and others, with deep knowledge of song writing, synthesis, mixing, and mastering</li>
               <li>Audio signal processing and sound design — transferable DSP and signal analysis skills</li>
-              <li>Experimented with creative coding for visual work and audio processing.</li>
+              <li>Experimented with creative coding for visual work and audio processing</li>
             </ul>
           </div>
 
@@ -575,7 +595,7 @@
             </div>
             <div class="entry__sub">University of Vienna</div>
             <ul>
-              <li>generall Molecular Biology, Coursework in data analysis (R, Python), proteomics, fluorescence microscopy, cell biology, Neuroscience</li>
+              <li>Coursework in general molecular biology, data analysis (R, Python), proteomics, fluorescence microscopy, cell biology, and neuroscience</li>
             </ul>
           </div>
 
@@ -900,6 +920,7 @@
         audioActive = !audioActive;
         if (audioActive && audioCtx.state === 'suspended') audioCtx.resume();
         listenBtn.classList.toggle('is-active', audioActive);
+        listenBtn.setAttribute('aria-pressed', String(audioActive));
         listenLabel.textContent = audioActive ? '■ mute' : '▶ listen';
         if (!audioActive) hzEl.textContent = '—';
       });
