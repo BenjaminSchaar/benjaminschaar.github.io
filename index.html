@@ -78,15 +78,6 @@
     border-bottom: 1px solid var(--line);
   }
 
-  #shaderBg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    z-index: 0;
-  }
-
   #signals {
     position: absolute;
     inset: 0;
@@ -94,7 +85,6 @@
     height: 100%;
     display: block;
     cursor: crosshair;
-    z-index: 1;
   }
 
   /* printed-only static photo; hidden on screen */
@@ -158,7 +148,45 @@
     user-select: none;
   }
 
-/* soft bottom vignette so text feels anchored */
+  .hero__info {
+    position: absolute;
+    bottom: 22px;
+    left: 28px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--caption);
+    pointer-events: none;
+  }
+
+  .hero__listen {
+    position: absolute;
+    bottom: 18px;
+    right: 24px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: rgba(10, 14, 20, 0.6);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    padding: 9px 16px;
+    cursor: pointer;
+    z-index: 10;
+    transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    backdrop-filter: blur(4px);
+  }
+  .hero__listen:hover {
+    color: var(--accent);
+    border-color: var(--accent-soft);
+  }
+  .hero__listen.is-active {
+    color: var(--accent);
+    border-color: var(--accent-soft);
+    background: rgba(138, 168, 200, 0.06);
+  }
+
+  /* soft bottom vignette so text feels anchored */
   .hero::after {
     content: "";
     position: absolute;
@@ -338,7 +366,7 @@
       gap: 18pt;
     }
     .hero::after { display: none; }
-    #signals, #shaderBg { display: none !important; }
+    #signals, .hero__info, .hero__listen { display: none !important; }
     .hero__photo-print {
       display: block;
       width: 78pt;
@@ -382,7 +410,6 @@
 </head>
 <body>
   <header class="hero">
-    <canvas id="shaderBg" aria-hidden="true"></canvas>
     <canvas id="signals" aria-hidden="true"></canvas>
     <img class="hero__photo-print" src="profile.png" alt="Benjamin Schaar" />
 
@@ -396,6 +423,13 @@
       </div>
     </div>
 
+    <div class="hero__info">
+      <span id="hzReadout">—</span> hz &middot; <span id="nodeCount">0</span> nodes
+    </div>
+
+    <button class="hero__listen" id="listenBtn" type="button" aria-label="Toggle ambient audio" aria-pressed="false">
+      <span id="listenLabel">▶ listen</span>
+    </button>
   </header>
 
   <main class="cv">
@@ -609,22 +643,32 @@
 
   <script>
     (() => {
-      const canvas = document.getElementById('signals');
-      const ctx    = canvas.getContext('2d');
-
-      // shader background layer
-      const shaderCanvas = document.getElementById('shaderBg');
-      const gl = shaderCanvas.getContext('webgl', { antialias: false, alpha: false, premultipliedAlpha: false })
-              || shaderCanvas.getContext('experimental-webgl');
-      let shaderProg = null, uTime = null, uRes = null, uMouse = null, quadBuf = null;
-      let shaderOk = false;
-      const shaderStart = performance.now();
+      const canvas   = document.getElementById('signals');
+      const ctx      = canvas.getContext('2d');
+      const listenBtn   = document.getElementById('listenBtn');
+      const listenLabel = document.getElementById('listenLabel');
+      const hzEl    = document.getElementById('hzReadout');
+      const nodesEl = document.getElementById('nodeCount');
 
       let width = 0, height = 0, dpr = 1;
+      let audioCtx = null;
+      let audioActive = false;
+      let nodes = [];
       let photoNode = null;
       let mouseX = -1e4, mouseY = -1e4;
       let photoLoaded = false;
       const photoImg = new Image();
+
+      // Phrygian scale, A2 base — matches reference "Signals"
+      const scale = [0, 1, 3, 5, 7, 8, 10];
+      const baseFreq = 110;
+
+      const noteToFreq = note => {
+        const octave = Math.floor(note / 7);
+        const deg = note % 7;
+        const semi = scale[deg] + octave * 12;
+        return baseFreq * Math.pow(2, semi / 12);
+      };
 
       function resize() {
         dpr = window.devicePixelRatio || 1;
@@ -634,8 +678,6 @@
         canvas.width  = Math.floor(width  * dpr);
         canvas.height = Math.floor(height * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        resizeShader();
 
         if (photoNode) {
           const narrow = width < 720;
@@ -707,183 +749,236 @@
         onHit() { this.lastHit = Date.now(); }
       }
 
-// ===== shader: warped iso-field =====
-      const vertSrc = `
-        attribute vec2 a_pos;
-        void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
-      `;
-
-      const fragSrc = `#extension GL_OES_standard_derivatives : enable
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-
-uniform float u_time;
-uniform vec2  u_resolution;
-uniform vec2  u_mouse;
-
-float hash(vec2 p) {
-  p = fract(p * vec2(233.34, 851.73));
-  p += dot(p, p + 23.45);
-  return fract(p.x * p.y);
-}
-
-float vnoise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(
-    mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
-    mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
-    u.y
-  );
-}
-
-float fbm(vec2 p) {
-  float v = 0.0;
-  float a = 0.5;
-  mat2 rot = mat2(0.8, 0.6, -0.6, 0.8);
-  for (int i = 0; i < 4; i++) {
-    v += a * vnoise(p);
-    p = rot * p * 2.0;
-    a *= 0.5;
-  }
-  return v;
-}
-
-void main() {
-  vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-  vec2 aspect = vec2(u_resolution.x / u_resolution.y, 1.0);
-  vec2 p = (uv - 0.5) * aspect * 2.2;
-
-  float t = u_time * 0.045;
-
-  // Inigo Quilez domain warp
-  vec2 q = vec2(
-    fbm(p + vec2(0.0, 0.0) + t),
-    fbm(p + vec2(5.2, 1.3) - t)
-  );
-  vec2 r = vec2(
-    fbm(p + 3.5 * q + vec2(1.7, 9.2)),
-    fbm(p + 3.5 * q + vec2(8.3, 2.8))
-  );
-  float f = fbm(p + 3.5 * r);
-
-  // local cursor warp
-  vec2 md = (gl_FragCoord.xy - u_mouse) / u_resolution.y;
-  float mInf = exp(-dot(md, md) * 9.0);
-  f += mInf * 0.18;
-
-  // derivative-aware isolines
-  float bands = 9.0;
-  float d = abs(fract(f * bands) - 0.5);
-  float w = fwidth(f * bands) * 1.2;
-  float line = 1.0 - smoothstep(w, w * 2.5, d);
-
-  // palette tuned to --bg-hero / --accent
-  vec3 cDark = vec3(0.024, 0.035, 0.063);
-  vec3 cMid  = vec3(0.060, 0.090, 0.130);
-  vec3 cAcc  = vec3(0.541, 0.659, 0.784);
-
-  vec3 base = mix(cDark, cMid, smoothstep(0.25, 0.85, f));
-  vec3 col  = mix(base, cAcc, line * 0.38);
-
-  gl_FragColor = vec4(col, 1.0);
-}
-`;
-
-      function compileShader(type, src) {
-        const s = gl.createShader(type);
-        gl.shaderSource(s, src);
-        gl.compileShader(s);
-        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-          console.warn('shader compile error:', gl.getShaderInfoLog(s));
-          gl.deleteShader(s);
-          return null;
+      class Node {
+        constructor(x, y) {
+          this.x = x;
+          this.y = y;
+          this.vx = (Math.random() - 0.5) * 0.5;
+          this.vy = (Math.random() - 0.5) * 0.5;
+          this.radius = 1.8 + Math.random() * 2.4;
+          this.note = Math.floor(Math.random() * 21);
+          this.pulsePhase = Math.random() * Math.PI * 2;
+          this.playing = false;
+          this.lastTrigger = 0;
         }
-        return s;
-      }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
 
-      function initShader() {
-        if (!gl) return;
-        gl.getExtension('OES_standard_derivatives');
-        const vs = compileShader(gl.VERTEX_SHADER,   vertSrc);
-        const fs = compileShader(gl.FRAGMENT_SHADER, fragSrc);
-        if (!vs || !fs) return;
-        shaderProg = gl.createProgram();
-        gl.attachShader(shaderProg, vs);
-        gl.attachShader(shaderProg, fs);
-        gl.linkProgram(shaderProg);
-        if (!gl.getProgramParameter(shaderProg, gl.LINK_STATUS)) {
-          console.warn('shader link error:', gl.getProgramInfoLog(shaderProg));
-          return;
+          // mouse attraction (only when mouse inside hero)
+          const mdx = mouseX - this.x;
+          const mdy = mouseY - this.y;
+          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (mdist < 260 && mdist > 50) {
+            this.vx += mdx / mdist * 0.012;
+            this.vy += mdy / mdist * 0.012;
+          }
+
+          // photo gravity — gentle, distance-gated, with falloff
+          // Only pulls nodes within mid-range; strongest near orbit, zero at edge.
+          if (photoNode) {
+            const pdx = photoNode.x - this.x;
+            const pdy = photoNode.y - this.y;
+            const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
+            const orbitR = photoNode.radius + 32;
+            const gravityRange = 240;
+            if (pdist > orbitR && pdist < gravityRange) {
+              const strength = (1 - pdist / gravityRange) * 0.0015;
+              this.vx += pdx / pdist * strength;
+              this.vy += pdy / pdist * strength;
+            } else if (pdist < photoNode.radius + 10) {
+              // soft repulsion so they can't sit inside the photo
+              this.vx -= pdx / pdist * 0.09;
+              this.vy -= pdy / pdist * 0.09;
+            }
+          }
+
+          // ambient wander — keeps nodes from pooling in the photo attractor
+          this.vx += (Math.random() - 0.5) * 0.03;
+          this.vy += (Math.random() - 0.5) * 0.03;
+
+          // boundaries
+          if (this.x < 30) this.vx += 0.03;
+          if (this.x > width  - 30) this.vx -= 0.03;
+          if (this.y < 24) this.vy += 0.03;
+          if (this.y > height - 24) this.vy -= 0.03;
+
+          // damping (lighter so drift persists against the wander force)
+          this.vx *= 0.99;
+          this.vy *= 0.99;
+
+          this.pulsePhase += 0.02;
         }
-        uTime  = gl.getUniformLocation(shaderProg, 'u_time');
-        uRes   = gl.getUniformLocation(shaderProg, 'u_resolution');
-        uMouse = gl.getUniformLocation(shaderProg, 'u_mouse');
+        draw() {
+          const pulse = 1 + Math.sin(this.pulsePhase) * 0.35;
+          const r = this.radius * pulse;
 
-        quadBuf = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-          -1, -1,   1, -1,  -1,  1,
-           1, -1,   1,  1,  -1,  1,
-        ]), gl.STATIC_DRAW);
-        const aPos = gl.getAttribLocation(shaderProg, 'a_pos');
-        gl.enableVertexAttribArray(aPos);
-        gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+          const glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 4);
+          glow.addColorStop(0, this.playing
+            ? 'rgba(190, 215, 240, 0.5)'
+            : 'rgba(110, 140, 180, 0.22)');
+          glow.addColorStop(1, 'rgba(110, 140, 180, 0)');
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, r * 4, 0, Math.PI * 2);
+          ctx.fillStyle = glow;
+          ctx.fill();
 
-        shaderOk = true;
-        resizeShader();
-      }
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = this.playing
+            ? 'rgba(210, 225, 245, 0.95)'
+            : 'rgba(135, 160, 190, 0.68)';
+          ctx.fill();
+        }
+        trigger() {
+          if (!audioCtx || !audioActive) return;
+          if (Date.now() - this.lastTrigger < 120) return;
+          this.lastTrigger = Date.now();
 
-      function resizeShader() {
-        if (!gl) return;
-        const rect = shaderCanvas.getBoundingClientRect();
-        const pxW = Math.max(1, Math.floor(rect.width  * dpr));
-        const pxH = Math.max(1, Math.floor(rect.height * dpr));
-        if (shaderCanvas.width !== pxW)  shaderCanvas.width  = pxW;
-        if (shaderCanvas.height !== pxH) shaderCanvas.height = pxH;
-        gl.viewport(0, 0, pxW, pxH);
-      }
+          const osc    = audioCtx.createOscillator();
+          const gain   = audioCtx.createGain();
+          const filter = audioCtx.createBiquadFilter();
 
-      function drawShader() {
-        if (!shaderOk) return;
-        gl.useProgram(shaderProg);
-        gl.uniform1f(uTime, (performance.now() - shaderStart) * 0.001);
-        gl.uniform2f(uRes,  shaderCanvas.width, shaderCanvas.height);
-        // mouseX/mouseY are in CSS px, canvas-local, top-down; WebGL is bottom-up
-        const my = (height - mouseY) * dpr;
-        const mx = mouseX * dpr;
-        gl.uniform2f(uMouse, mx, my);
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
+          osc.type = 'sine';
+          osc.frequency.value = noteToFreq(this.note);
+          filter.type = 'lowpass';
+          filter.frequency.value = 1800 + Math.random() * 2200;
+          filter.Q.value = 1;
+
+          const now = audioCtx.currentTime;
+          gain.gain.setValueAtTime(0, now);
+          gain.gain.linearRampToValueAtTime(0.06, now + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(now + 1.8);
+
+          this.playing = true;
+          setTimeout(() => { this.playing = false; }, 220);
+
+          hzEl.textContent = Math.round(noteToFreq(this.note));
+        }
       }
 
       function init() {
         photoNode = new PhotoNode();
+        nodes = [];
+        // denser around the right half so they drift into the text + back
+        const count = 34;
+        for (let i = 0; i < count; i++) {
+          nodes.push(new Node(
+            60 + Math.random() * (width  - 120),
+            30 + Math.random() * (height - 60),
+          ));
+        }
         resize();
       }
 
+      function drawConnections() {
+        const thr = 140;
+        const photoThr = 130;
+
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[i].x - nodes[j].x;
+            const dy = nodes[i].y - nodes[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < thr) {
+              const alpha = (1 - dist / thr) * 0.22;
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.strokeStyle = `rgba(120, 150, 185, ${alpha})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+
+              if (dist < 38 && audioActive && Math.random() < 0.008) {
+                nodes[Math.random() > 0.5 ? i : j].trigger();
+              }
+            }
+          }
+        }
+
+        if (photoNode) {
+          for (const n of nodes) {
+            const dx = photoNode.x - n.x;
+            const dy = photoNode.y - n.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const edge = dist - photoNode.radius;
+            if (edge < photoThr && edge > 0) {
+              const alpha = (1 - edge / photoThr) * 0.55;
+              const ex = photoNode.x - (dx / dist) * photoNode.radius;
+              const ey = photoNode.y - (dy / dist) * photoNode.radius;
+              ctx.beginPath();
+              ctx.moveTo(n.x, n.y);
+              ctx.lineTo(ex, ey);
+              ctx.strokeStyle = `rgba(175, 205, 235, ${alpha})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+
+              if (edge < 28 && audioActive && Math.random() < 0.018) {
+                n.trigger();
+                photoNode.onHit();
+              }
+            }
+          }
+        }
+      }
+
       function frame() {
-        drawShader();
+        // subtle motion-blur / fade
+        ctx.fillStyle = 'rgba(6, 9, 16, 0.22)';
+        ctx.fillRect(0, 0, width, height);
 
-        // clear 2D canvas each frame (no trails needed)
-        ctx.clearRect(0, 0, width, height);
-
+        drawConnections();
+        for (const n of nodes) { n.update(); n.draw(); }
         photoNode && photoNode.update();
         photoNode && photoNode.draw();
 
+        nodesEl.textContent = nodes.length;
         requestAnimationFrame(frame);
       }
 
-      // pointer tracking (feeds the shader's cursor-warp uniform)
+      // audio toggle
+      listenBtn.addEventListener('click', () => {
+        if (!audioCtx) {
+          try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          } catch (e) { return; }
+        }
+        audioActive = !audioActive;
+        if (audioActive && audioCtx.state === 'suspended') audioCtx.resume();
+        listenBtn.classList.toggle('is-active', audioActive);
+        listenBtn.setAttribute('aria-pressed', String(audioActive));
+        listenLabel.textContent = audioActive ? '■ mute' : '▶ listen';
+        if (!audioActive) hzEl.textContent = '—';
+      });
+
+      // pointer tracking
       canvas.addEventListener('mousemove', e => {
         const r = canvas.getBoundingClientRect();
         mouseX = e.clientX - r.left;
         mouseY = e.clientY - r.top;
       });
       canvas.addEventListener('mouseleave', () => { mouseX = -1e4; mouseY = -1e4; });
+
+      // click anywhere on hero → spawn a node (unless on photo)
+      canvas.addEventListener('click', e => {
+        const r = canvas.getBoundingClientRect();
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
+        if (photoNode) {
+          const d = Math.hypot(photoNode.x - x, photoNode.y - y);
+          if (d < photoNode.radius + 16) return;
+        }
+        if (nodes.length >= 70) return;
+        const n = new Node(x, y);
+        nodes.push(n);
+        if (audioActive) n.trigger();
+      });
 
       window.addEventListener('resize', resize);
 
@@ -893,7 +988,6 @@ void main() {
       photoImg.src = 'profile.png';
 
       // boot
-      initShader();
       resize();
       init();
       frame();
