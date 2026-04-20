@@ -199,9 +199,9 @@
   /* ---------- CV container ---------- */
 
   .cv {
-    max-width: 880px;
+    max-width: 1020px;
     margin: 0 auto;
-    padding: 64px 64px 96px;
+    padding: 72px 64px 96px;
   }
 
   .body {
@@ -223,6 +223,17 @@
     padding-bottom: 12px;
     margin-bottom: 16px;
     border-bottom: 1px solid var(--line);
+  }
+
+  .main .section__title {
+    font-family: "Inter", -apple-system, sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--text);
+    padding-bottom: 14px;
+    margin-bottom: 24px;
   }
 
   /* ---------- sidebar ---------- */
@@ -262,23 +273,23 @@
   /* ---------- main ---------- */
 
   .main p {
-    font-size: 14px;
-    line-height: 1.78;
+    font-size: 16px;
+    line-height: 1.7;
     color: var(--body);
   }
-  .main p + p { margin-top: 12px; }
+  .main p + p { margin-top: 14px; }
 
   .generalist {
     border-left: 1px solid var(--accent-soft);
-    padding: 2px 0 2px 18px;
-    margin-top: 22px;
+    padding: 2px 0 2px 20px;
+    margin-top: 26px;
     color: var(--text-soft);
-    font-size: 13.5px !important;
-    line-height: 1.78 !important;
+    font-size: 15px !important;
+    line-height: 1.72 !important;
   }
   .generalist b { font-weight: 600; color: var(--text); }
 
-  .entry { margin-bottom: 26px; }
+  .entry { margin-bottom: 30px; }
   .entry:last-child { margin-bottom: 0; }
 
   .entry__head {
@@ -289,14 +300,14 @@
     margin-bottom: 3px;
   }
   .entry__title {
-    font-size: 15px;
+    font-size: 16.5px;
     font-weight: 600;
     letter-spacing: -0.005em;
     color: var(--text);
   }
   .entry__date {
     font-family: "JetBrains Mono", monospace;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--muted);
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.05em;
@@ -304,18 +315,18 @@
     flex-shrink: 0;
   }
   .entry__sub {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--muted);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
   .entry ul { list-style: none; }
   .entry li {
-    font-size: 13.5px;
-    line-height: 1.66;
+    font-size: 15px;
+    line-height: 1.68;
     color: var(--body);
-    padding-left: 18px;
+    padding-left: 20px;
     position: relative;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
   }
   .entry li:last-child { margin-bottom: 0; }
   .entry li::before {
@@ -345,6 +356,7 @@
     .cv { padding: 40px 22px 72px; }
     .body { grid-template-columns: 1fr; gap: 32px; }
     .entry__head { flex-direction: column; align-items: flex-start; gap: 3px; }
+    .main .section__title { font-size: 22px; }
   }
 
   /* ---------- print ---------- */
@@ -397,6 +409,7 @@
 
     .cv { padding: 20pt 0 0; }
     .section__title { color: #6a7a8a; border-bottom-color: #d8d8d8; }
+    .main .section__title { color: #000; font-size: 16pt; font-weight: 600; }
     .entry__title { color: #000; }
     .entry__sub, .entry__date { color: #555; }
     .entry li, .main p, .sidebar .skill__value, .sidebar .lang { color: #222; }
