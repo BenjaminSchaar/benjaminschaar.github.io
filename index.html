@@ -767,15 +767,18 @@
             this.vy += mdy / mdist * 0.012;
           }
 
-          // photo gravity — drift toward & orbit
+          // photo gravity — gentle, distance-gated, with falloff
+          // Only pulls nodes within mid-range; strongest near orbit, zero at edge.
           if (photoNode) {
             const pdx = photoNode.x - this.x;
             const pdy = photoNode.y - this.y;
             const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
             const orbitR = photoNode.radius + 32;
-            if (pdist > orbitR) {
-              this.vx += pdx / pdist * 0.005;
-              this.vy += pdy / pdist * 0.005;
+            const gravityRange = 240;
+            if (pdist > orbitR && pdist < gravityRange) {
+              const strength = (1 - pdist / gravityRange) * 0.0015;
+              this.vx += pdx / pdist * strength;
+              this.vy += pdy / pdist * strength;
             } else if (pdist < photoNode.radius + 10) {
               // soft repulsion so they can't sit inside the photo
               this.vx -= pdx / pdist * 0.09;
@@ -783,15 +786,19 @@
             }
           }
 
+          // ambient wander — keeps nodes from pooling in the photo attractor
+          this.vx += (Math.random() - 0.5) * 0.03;
+          this.vy += (Math.random() - 0.5) * 0.03;
+
           // boundaries
           if (this.x < 30) this.vx += 0.03;
           if (this.x > width  - 30) this.vx -= 0.03;
           if (this.y < 24) this.vy += 0.03;
           if (this.y > height - 24) this.vy -= 0.03;
 
-          // damping
-          this.vx *= 0.985;
-          this.vy *= 0.985;
+          // damping (lighter so drift persists against the wander force)
+          this.vx *= 0.99;
+          this.vy *= 0.99;
 
           this.pulsePhase += 0.02;
         }
