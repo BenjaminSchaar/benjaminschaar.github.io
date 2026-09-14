@@ -3,50 +3,59 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Benjamin Schaar — CV</title>
+<title>Benjamin Schaar — Technical generalist</title>
 
-<meta name="description" content="Benjamin Schaar — PhD candidate in computational neuroscience, music producer, and creative technologist based in Vienna. Python data pipelines, HPC workflows, neural time-series analysis." />
-<meta name="theme-color" content="#0a0e14" />
+<meta name="description" content="Benjamin Schaar — Vienna-based technical generalist. Data pipelines, electronic music production, projection-mapped visuals. PhD candidate in computational neuroscience." />
+<meta name="theme-color" content="#1a1714" />
 <link rel="canonical" href="https://benjaminschaar.github.io/" />
 
 <meta property="og:type" content="profile" />
 <meta property="og:url" content="https://benjaminschaar.github.io/" />
-<meta property="og:title" content="Benjamin Schaar — Computational Neuroscience &amp; Creative Technologist" />
-<meta property="og:description" content="PhD candidate in computational neuroscience, music producer, and creative technologist. Vienna, Austria." />
-<meta property="og:image" content="https://benjaminschaar.github.io/profile.png" />
-<meta property="og:image:alt" content="Portrait of Benjamin Schaar" />
+<meta property="og:title" content="Benjamin Schaar — Technical generalist" />
+<meta property="og:description" content="Writes pipelines, makes records, builds projected visuals. Vienna-based." />
+<meta property="og:image" content="https://benjaminschaar.github.io/assets/hero.jpg" />
+<meta property="og:image:alt" content="Editorial photograph: oxidized metal meeting dark slate" />
 
-<meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Benjamin Schaar — Computational Neuroscience &amp; Creative Technologist" />
-<meta name="twitter:description" content="PhD candidate in computational neuroscience, music producer, and creative technologist. Vienna, Austria." />
-<meta name="twitter:image" content="https://benjaminschaar.github.io/profile.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Benjamin Schaar — Technical generalist" />
+<meta name="twitter:description" content="Writes pipelines, makes records, builds projected visuals. Vienna-based." />
+<meta name="twitter:image" content="https://benjaminschaar.github.io/assets/hero.jpg" />
 
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="apple-touch-icon" href="profile.png" />
 
+<link rel="preload" as="image" href="assets/hero.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
   rel="stylesheet"
 />
+
 <style>
   :root {
-    --bg:         #0a0e14;
-    --bg-hero:    #060910;
-    --bg-panel:   #0e131b;
-    --line:       #1a2230;
-    --line-soft:  #141a24;
-    --hair:       rgba(140, 160, 190, 0.08);
+    /* warm dark palette, never blue */
+    --bg:          #16130f;
+    --bg-elevated: #1f1b16;
+    --line:        #2a251f;
+    --line-soft:   #211d18;
 
-    --text:       #dde3ec;
-    --text-soft:  #b4becc;
-    --body:       #9ba6b6;
-    --muted:      #6b7687;
-    --caption:    #525c6b;
+    --text:        #ece4d4;
+    --body:        #bcb3a3;
+    --muted:       #847b6d;
+    --caption:     #5b5448;
 
-    --accent:     #8aa8c8;
-    --accent-soft: rgba(138, 168, 200, 0.5);
+    --accent:      #d27a3c;        /* rust amber pulled from hero */
+    --accent-soft: rgba(210, 122, 60, 0.55);
+    --accent-dim:  rgba(210, 122, 60, 0.15);
+
+    --max:         1200px;
+    --gutter:      80px;
+    --ease:        cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    --serif: "Instrument Serif", "Times New Roman", Georgia, serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono:  "JetBrains Mono", "SF Mono", "Courier New", monospace;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -57,306 +66,664 @@
   }
 
   body {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-      Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--sans);
     background: var(--bg);
     color: var(--body);
-    font-size: 15px;
-    line-height: 1.65;
+    font-size: 16px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
-  /* ---------- hero ---------- */
-
-  .hero {
-    position: relative;
-    width: 100%;
-    height: 360px;
-    background: var(--bg-hero);
-    overflow: hidden;
-    border-bottom: 1px solid var(--line);
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
   }
 
-  #signals {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    cursor: crosshair;
-  }
-
-  /* printed-only static photo; hidden on screen */
-  .hero__photo-print {
-    display: none;
-  }
-
-  .hero__overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0 64px 0 300px;
-    left: 0; right: 0;
-  }
-  .hero__name {
-    font-size: 44px;
-    font-weight: 700;
-    letter-spacing: -0.028em;
-    line-height: 1.02;
-    color: var(--text);
-    margin-bottom: 12px;
-    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
-  }
-  .hero__role {
-    font-family: "JetBrains Mono", "SF Mono", "Courier New", monospace;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 18px;
-  }
-  .hero__contact {
-    font-family: "JetBrains Mono", "SF Mono", "Courier New", monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 14px;
-    align-items: center;
-    pointer-events: auto;
-  }
-  .hero__contact a {
+  a {
     color: inherit;
     text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s ease, color 0.2s ease;
-  }
-  .hero__contact a:hover {
-    color: var(--text-soft);
-    border-bottom-color: var(--muted);
-  }
-  .hero__contact .sep {
-    color: var(--line);
-    user-select: none;
-  }
-
-  .hero__info {
-    position: absolute;
-    bottom: 22px;
-    left: 28px;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    color: var(--caption);
-    pointer-events: none;
-  }
-
-  .hero__listen {
-    position: absolute;
-    bottom: 18px;
-    right: 24px;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    background: rgba(10, 14, 20, 0.6);
-    border: 1px solid var(--line);
-    color: var(--muted);
-    padding: 9px 16px;
-    cursor: pointer;
-    z-index: 10;
-    transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-    backdrop-filter: blur(4px);
-  }
-  .hero__listen:hover {
-    color: var(--accent);
-    border-color: var(--accent-soft);
-  }
-  .hero__listen.is-active {
-    color: var(--accent);
-    border-color: var(--accent-soft);
-    background: rgba(138, 168, 200, 0.06);
-  }
-
-  /* soft bottom vignette so text feels anchored */
-  .hero::after {
-    content: "";
-    position: absolute;
-    inset: auto 0 0 0;
-    height: 90px;
-    background: linear-gradient(to bottom, rgba(10, 14, 20, 0), rgba(10, 14, 20, 0.9));
-    pointer-events: none;
-  }
-
-  /* ---------- CV container ---------- */
-
-  .cv {
-    max-width: 1020px;
-    margin: 0 auto;
-    padding: 72px 64px 96px;
-  }
-
-  .body {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 56px;
-  }
-
-  .section { margin-bottom: 36px; }
-  .section:last-child { margin-bottom: 0; }
-
-  .section__title {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--accent);
-    padding-bottom: 12px;
-    margin-bottom: 16px;
     border-bottom: 1px solid var(--line);
+    transition: border-color 220ms var(--ease), color 220ms var(--ease);
   }
-
-  .main .section__title {
-    font-family: "Inter", -apple-system, sans-serif;
-    font-size: 28px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    text-transform: none;
+  a:hover {
     color: var(--text);
-    padding-bottom: 14px;
-    margin-bottom: 24px;
+    border-bottom-color: var(--accent);
   }
 
-  /* ---------- sidebar ---------- */
+  /* ---------- container ---------- */
 
-  .sidebar .skill { margin-bottom: 18px; }
-  .sidebar .skill:last-child { margin-bottom: 0; }
-
-  .sidebar .skill__label {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--text-soft);
-    margin-bottom: 6px;
-  }
-  .sidebar .skill__value {
-    font-size: 13px;
-    line-height: 1.62;
-    color: var(--body);
+  .wrap {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
   }
 
-  .sidebar .lang {
-    font-size: 13px;
-    color: var(--body);
-    line-height: 1.7;
+  /* ---------- HERO ---------- */
+
+  .hero {
+    min-height: 92vh;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(160px, 17vw, 250px);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "top    top"
+      "main   portrait"
+      "bottom bottom";
+    column-gap: clamp(40px, 5vw, 88px);
+    row-gap: clamp(48px, 8vh, 100px);
+    padding-top: 40px;
+    padding-bottom: 56px;
+    position: relative;
   }
-  .sidebar .lang b {
-    font-weight: 500;
-    color: var(--text-soft);
-    font-family: "JetBrains Mono", monospace;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    margin-right: 2px;
-  }
-
-  /* ---------- main ---------- */
-
-  .main p {
-    font-size: 16px;
-    line-height: 1.7;
-    color: var(--body);
-  }
-  .main p + p { margin-top: 14px; }
-
-  .generalist {
-    border-left: 1px solid var(--accent-soft);
-    padding: 2px 0 2px 20px;
-    margin-top: 26px;
-    color: var(--text-soft);
-    font-size: 15px !important;
-    line-height: 1.72 !important;
-  }
-  .generalist b { font-weight: 600; color: var(--text); }
-
-  .entry { margin-bottom: 30px; }
-  .entry:last-child { margin-bottom: 0; }
-
-  .entry__head {
+  .hero__top {
+    grid-area: top;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    gap: 16px;
-    margin-bottom: 3px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
-  .entry__title {
-    font-size: 16.5px;
-    font-weight: 600;
+  .hero__top .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 8px;
+    vertical-align: 1px;
+  }
+  .hero__credit {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .hero__avatar {
+    display: none; /* hidden on desktop — large portrait takes its place */
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--line);
+    filter: grayscale(0.25) sepia(0.12) saturate(0.95);
+    transition: filter 320ms var(--ease);
+  }
+  .hero__avatar:hover {
+    filter: none;
+  }
+
+  .hero__portrait {
+    grid-area: portrait;
+    width: 100%;
+    height: 100%;
+    max-height: clamp(420px, 64vh, 640px);
+    object-fit: cover;
+    object-position: center 18%;
+    border-radius: 2px;
+    align-self: end;
+    filter: grayscale(0.18) sepia(0.08) saturate(0.92) contrast(0.96) brightness(0.96);
+    transition: filter 600ms var(--ease);
+  }
+  .hero__portrait:hover {
+    filter: grayscale(0) sepia(0) saturate(1) contrast(1) brightness(1);
+  }
+
+  .hero__main {
+    grid-area: main;
+    align-self: end;
+    margin-top: 0;
+    max-width: 800px;
+  }
+  .hero__name {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(72px, 13vw, 188px);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    margin-bottom: clamp(28px, 4vw, 56px);
+  }
+  .hero__thesis {
+    font-family: var(--serif);
+    font-style: normal;
+    font-size: clamp(24px, 3.2vw, 42px);
+    line-height: 1.18;
     letter-spacing: -0.005em;
     color: var(--text);
+    max-width: 22ch;
+    margin-bottom: 28px;
   }
-  .entry__date {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 12px;
+  .hero__sub {
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--body);
+    max-width: 56ch;
+  }
+  .hero__sub b {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .hero__bottom {
+    grid-area: bottom;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     color: var(--muted);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-    flex-shrink: 0;
   }
-  .entry__sub {
+  .hero__bottom a {
+    color: var(--text);
+    border-bottom-color: var(--accent-soft);
+  }
+  .hero__scroll {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero__scroll .arrow {
+    display: inline-block;
+    transform: translateY(0);
+    animation: drift 2.4s var(--ease) infinite;
+  }
+  @keyframes drift {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50%      { transform: translateY(4px); opacity: 1; }
+  }
+
+  /* ---------- SECTION ---------- */
+
+  .section {
+    padding-top: 120px;
+    padding-bottom: 24px;
+    position: relative;
+  }
+  .section--last { padding-bottom: 120px; }
+
+  .section__head {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    margin-bottom: 56px;
+  }
+  .section__num {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    padding-top: 14px;
+    border-top: 1px solid var(--accent-soft);
+  }
+  .section__title {
+    font-family: var(--serif);
+    font-style: normal;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .section__body {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+  }
+  .section__body > .col {
+    grid-column: 2;
+  }
+
+  /* ---------- ABOUT ---------- */
+
+  .about__lead {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(22px, 2.4vw, 30px);
+    line-height: 1.32;
+    color: var(--text);
+    max-width: 28ch;
+    margin-bottom: 36px;
+  }
+  .about__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    max-width: 1000px;
+  }
+  .about__body p {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--body);
+  }
+  .about__body p + p { margin-top: 16px; }
+  .about__body .accent { color: var(--text); font-weight: 500; }
+
+  /* ---------- IMAGE MOMENT ---------- */
+
+  .feature {
+    margin-top: 96px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .feature__img-wrap {
+    width: 100%;
+    overflow: hidden;
+    background: var(--bg-elevated);
+    aspect-ratio: 16 / 9;
+    border-radius: 2px;
+  }
+  .feature__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.02);
+    transition: transform 1200ms var(--ease);
+  }
+  .feature.is-visible .feature__img {
+    transform: scale(1);
+  }
+  .feature__caption {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .feature__caption .label {
+    color: var(--accent);
+  }
+
+  /* ---------- DOMAINS ---------- */
+
+  .domains__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 56px;
+  }
+  .domain {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .domain__years {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .domain__title {
+    font-family: var(--serif);
+    font-size: 32px;
+    line-height: 1.08;
+    color: var(--text);
+    font-weight: 400;
+  }
+  .domain__body {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--body);
+  }
+  .domain__tools {
+    margin-top: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ---------- PIPELINE (selected problems) ---------- */
+
+  .pipeline__lead {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(20px, 2.2vw, 26px);
+    line-height: 1.32;
+    color: var(--text);
+    max-width: 36ch;
+    margin-bottom: 36px;
+  }
+  .pipeline__strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+  .pipeline__step {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    min-width: 0;
+  }
+  .pipeline__panel {
+    aspect-ratio: 1 / 1;
+    background: var(--bg-elevated);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .pipeline__panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(0.08) saturate(0.95);
+    transition: filter 320ms var(--ease), transform 600ms var(--ease);
+  }
+  .pipeline__panel:hover img {
+    filter: none;
+    transform: scale(1.02);
+  }
+  .pipeline__cap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pipeline__num {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .pipeline__label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .pipeline__body {
+    max-width: 64ch;
+  }
+  .pipeline__body p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--body);
+  }
+  .pipeline__body p + p { margin-top: 14px; }
+  .pipeline__body b { color: var(--text); font-weight: 500; }
+
+  /* ---------- CATALOG ---------- */
+
+  .catalog__list {
+    border-top: 1px solid var(--line);
+  }
+  .cat {
+    display: grid;
+    grid-template-columns: 80px 100px 1fr 100px;
+    gap: 24px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--line);
+    transition: background 240ms var(--ease);
+    align-items: baseline;
+  }
+  .cat:hover {
+    background: var(--bg-elevated);
+  }
+  .cat__year {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .cat__tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    align-self: baseline;
+  }
+  .cat__main {
+    min-width: 0;
+  }
+  .cat__title {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.18;
+    color: var(--text);
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+  .cat__sub {
     font-size: 14px;
     color: var(--muted);
     margin-bottom: 12px;
   }
-  .entry ul { list-style: none; }
-  .entry li {
+  .cat__desc {
     font-size: 15px;
-    line-height: 1.68;
+    line-height: 1.6;
     color: var(--body);
-    padding-left: 20px;
-    position: relative;
-    margin-bottom: 6px;
+    max-width: 60ch;
   }
-  .entry li:last-child { margin-bottom: 0; }
-  .entry li::before {
+  .cat__desc ul {
+    list-style: none;
+    margin-top: 6px;
+  }
+  .cat__desc li {
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+  .cat__desc li::before {
     content: "";
     position: absolute;
     left: 0;
-    top: 0.75em;
+    top: 0.78em;
     width: 8px;
     height: 1px;
     background: var(--accent-soft);
   }
+  .cat__role {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-align: right;
+    align-self: baseline;
+  }
+
+  /* ---------- STACK ---------- */
+
+  .stack__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 56px;
+    max-width: 1000px;
+  }
+  .stack__cell {
+    min-width: 0;
+  }
+  .stack__label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .stack__value {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--body);
+  }
+  .stack__lang {
+    grid-column: 1 / -1;
+    margin-top: 16px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .stack__lang-line {
+    font-size: 15px;
+    color: var(--body);
+  }
+  .stack__lang-line b {
+    font-family: var(--mono);
+    font-weight: 500;
+    color: var(--text);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    margin-right: 8px;
+  }
+
+  /* ---------- COLOPHON ---------- */
+
+  .colophon {
+    padding-top: 96px;
+    padding-bottom: 96px;
+    border-top: 1px solid var(--line);
+    margin-top: 120px;
+  }
+  .colophon__grid {
+    display: grid;
+    grid-template-columns: 80px 1fr 280px;
+    gap: 24px;
+    align-items: start;
+  }
+  .colophon__num {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    padding-top: 4px;
+  }
+  .colophon__copy {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--text);
+    max-width: 36ch;
+  }
+  .colophon__copy em { color: var(--accent); font-style: italic; }
+  .colophon__meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+  .colophon__meta a {
+    color: var(--text);
+    border-bottom-color: var(--line);
+  }
+
+  /* ---------- scroll reveal ---------- */
+
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 760ms var(--ease), transform 760ms var(--ease);
+  }
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    [data-reveal] { opacity: 1; transform: none; transition: none; }
+    .feature__img { transform: none; transition: none; }
+    .hero__scroll .arrow { animation: none; }
+  }
+
+  /* ---------- print-only photo (hidden on screen) ---------- */
+  .print-photo { display: none; }
 
   /* ---------- responsive ---------- */
 
-  @media (max-width: 720px) {
-    .hero { height: 420px; }
-    .hero__overlay {
-      padding: 28px 24px 0 24px;
-      justify-content: flex-start;
-      padding-top: 220px;
+  @media (max-width: 1100px) {
+    :root { --gutter: 56px; }
+  }
+
+  @media (max-width: 820px) {
+    :root { --gutter: 28px; }
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      grid-template-columns: none;
+      grid-template-rows: none;
+      grid-template-areas: none;
+      min-height: auto;
+      padding-top: 32px;
+      padding-bottom: 48px;
+      row-gap: 0;
+      column-gap: 0;
     }
-    .hero__name { font-size: 30px; }
-    .hero__role { font-size: 10px; margin-bottom: 12px; }
-    .hero__contact { font-size: 10px; gap: 0 10px; }
-    .hero__listen { bottom: 14px; right: 14px; padding: 7px 12px; }
-    .hero__info { bottom: 18px; left: 18px; }
-    .cv { padding: 40px 22px 72px; }
-    .body { grid-template-columns: 1fr; gap: 32px; }
-    .entry__head { flex-direction: column; align-items: flex-start; gap: 3px; }
-    .main .section__title { font-size: 22px; }
+    .hero__avatar { display: inline-block; }
+    .hero__portrait { display: none; }
+    .hero__main { margin-top: clamp(40px, 10vh, 100px); }
+    .hero__name { font-size: clamp(56px, 16vw, 96px); }
+    .hero__thesis { font-size: 22px; }
+    .hero__bottom { flex-direction: column; gap: 12px; align-items: flex-start; margin-top: 64px; }
+
+    .section { padding-top: 80px; }
+    .section__head { grid-template-columns: 1fr; gap: 8px; margin-bottom: 36px; }
+    .section__title { font-size: clamp(36px, 9vw, 56px); }
+    .section__num { padding-top: 0; border-top: none; }
+    .section__body { grid-template-columns: 1fr; }
+    .section__body > .col { grid-column: 1; }
+
+    .about__body { grid-template-columns: 1fr; gap: 18px; }
+
+    .domains__grid { grid-template-columns: 1fr; gap: 36px; }
+
+    .feature__caption { grid-template-columns: 1fr; gap: 8px; }
+
+    .pipeline__strip { grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 36px; }
+
+    .cat { grid-template-columns: 80px 1fr; gap: 16px; padding: 24px 0; }
+    .cat__tag { grid-column: 2; padding-top: 4px; }
+    .cat__main { grid-column: 2; }
+    .cat__role { grid-column: 2; text-align: left; }
+
+    .stack__grid { grid-template-columns: 1fr 1fr; gap: 28px 24px; }
+    .stack__lang { grid-template-columns: 1fr; gap: 12px; }
+
+    .colophon__grid { grid-template-columns: 1fr; gap: 24px; }
+  }
+
+  @media (max-width: 480px) {
+    .stack__grid { grid-template-columns: 1fr; }
+    .pipeline__strip { grid-template-columns: repeat(2, 1fr); }
   }
 
   /* ---------- print ---------- */
@@ -368,18 +735,36 @@
       color: #1a1a1a !important;
       font-size: 10.5pt;
     }
+    body { overflow: visible; }
+    .wrap { padding: 0; max-width: none; }
     .hero {
-      height: auto;
-      background: #fff;
-      border-bottom: 1px solid #d0d0d0;
+      min-height: auto;
       padding: 0 0 14pt;
       display: flex;
+      flex-direction: row;
       align-items: center;
       gap: 18pt;
+      border-bottom: 1px solid #d0d0d0;
+      grid-template-columns: none;
+      grid-template-rows: none;
+      grid-template-areas: none;
     }
-    .hero::after { display: none; }
-    #signals, .hero__info, .hero__listen { display: none !important; }
-    .hero__photo-print {
+    .hero__top, .hero__bottom, .hero__portrait { display: none; }
+    .hero__main { margin: 0; max-width: none; flex: 1; }
+    .hero__name {
+      color: #000;
+      font-size: 24pt;
+      margin-bottom: 6pt;
+    }
+    .hero__thesis {
+      color: #1a1a1a;
+      font-size: 12pt;
+      margin-bottom: 4pt;
+      max-width: none;
+    }
+    .hero__sub { color: #444; font-size: 9.5pt; max-width: none; }
+
+    .print-photo {
       display: block;
       width: 78pt;
       height: 78pt;
@@ -387,624 +772,470 @@
       object-fit: cover;
       flex-shrink: 0;
     }
-    .hero__overlay {
-      position: static;
-      padding: 0;
-      max-width: none;
-      margin: 0;
-    }
-    .hero__name {
-      color: #000;
-      font-size: 22pt;
-      margin-bottom: 4pt;
-      text-shadow: none;
-    }
-    .hero__role {
-      color: #5a6a7a;
-      margin-bottom: 8pt;
-      letter-spacing: 0.18em;
-    }
-    .hero__contact { color: #555; }
-    .hero__contact .sep { color: #bbb; }
 
-    .cv { padding: 20pt 0 0; }
-    .section__title { color: #6a7a8a; border-bottom-color: #d8d8d8; }
-    .main .section__title { color: #000; font-size: 16pt; font-weight: 600; }
-    .entry__title { color: #000; }
-    .entry__sub, .entry__date { color: #555; }
-    .entry li, .main p, .sidebar .skill__value, .sidebar .lang { color: #222; }
-    .sidebar .skill__label, .sidebar .lang b { color: #000; }
-    .entry li::before { background: #999; }
-    .generalist { border-left-color: #888; color: #1a1a1a; }
-    a { color: inherit; text-decoration: none; border-bottom: none !important; }
-    .section, .entry { page-break-inside: avoid; }
+    .feature, .colophon { display: none; }
+    .pipeline__strip { display: none; }
+    .pipeline__lead { color: #1a1a1a; font-size: 11pt; max-width: none; margin-bottom: 6pt; }
+    .pipeline__body p { color: #1a1a1a; font-size: 9.5pt; }
+    .pipeline__body b { color: #000; }
+
+    .section { padding: 18pt 0 4pt; page-break-inside: avoid; }
+    .section--last { padding-bottom: 0; }
+    .section__head { gap: 8pt; margin-bottom: 8pt; grid-template-columns: 50pt 1fr; }
+    .section__num { color: #6a5a4a; padding-top: 2pt; border-top-color: #d0c8bc; font-size: 9pt; }
+    .section__title { color: #000; font-size: 16pt; }
+    .section__body { grid-template-columns: 50pt 1fr; gap: 8pt; }
+
+    .about__lead { color: #000; font-size: 11pt; max-width: none; margin-bottom: 8pt; }
+    .about__body { grid-template-columns: 1fr 1fr; gap: 18pt; max-width: none; }
+    .about__body p, .about__body p.accent { color: #1a1a1a; font-size: 10pt; }
+
+    .domains__grid { grid-template-columns: repeat(3, 1fr); gap: 12pt; }
+    .domain__years { color: #6a5a4a; }
+    .domain__title { color: #000; font-size: 13pt; }
+    .domain__body { color: #1a1a1a; font-size: 9.5pt; }
+    .domain__tools { color: #555; font-size: 8.5pt; }
+
+    .catalog__list { border-top-color: #d0d0d0; }
+    .cat {
+      border-bottom-color: #e0d8ce;
+      padding: 6pt 0;
+      grid-template-columns: 50pt 60pt 1fr 70pt;
+      gap: 8pt;
+      page-break-inside: avoid;
+    }
+    .cat:hover { background: transparent; }
+    .cat__year { color: #6a5a4a; }
+    .cat__tag { color: #777; }
+    .cat__title { color: #000; font-size: 11pt; }
+    .cat__sub, .cat__role { color: #555; font-size: 9pt; }
+    .cat__desc { color: #1a1a1a; font-size: 9.5pt; }
+    .cat__desc li::before { background: #aaa; }
+
+    .stack__grid { grid-template-columns: repeat(3, 1fr); gap: 10pt 16pt; max-width: none; }
+    .stack__label { color: #000; }
+    .stack__value, .stack__lang-line { color: #1a1a1a; }
+    .stack__lang { border-top-color: #d8d8d8; }
+    .stack__lang b { color: #000; }
+
+    [data-reveal] { opacity: 1 !important; transform: none !important; }
+    a { color: inherit; border-bottom: none !important; }
   }
 </style>
 </head>
 <body>
-  <header class="hero">
-    <canvas id="signals" aria-hidden="true"></canvas>
-    <img class="hero__photo-print" src="profile.png" alt="Benjamin Schaar" />
 
-    <div class="hero__overlay">
-      <h1 class="hero__name">Benjamin Schaar</h1>
-      <div class="hero__role">Computational Neuroscience · Creative Technologist</div>
-      <div class="hero__contact">
-        <span>Vienna, Austria</span>
-        <span class="sep">·</span>
-        <span>contact on request</span>
+  <main>
+
+    <!-- =================== HERO =================== -->
+    <header class="hero wrap" data-reveal>
+
+      <img class="print-photo" src="profile.png" alt="Benjamin Schaar" />
+
+      <div class="hero__top">
+        <span class="hero__credit">
+          <img class="hero__avatar" src="profile.png" alt="Benjamin Schaar" width="44" height="44" />
+          <span><span class="dot"></span>Vienna · Austria</span>
+        </span>
+        <span>2026</span>
       </div>
-    </div>
 
-    <div class="hero__info">
-      <span id="hzReadout">—</span> hz &middot; <span id="nodeCount">0</span> nodes
-    </div>
-
-    <button class="hero__listen" id="listenBtn" type="button" aria-label="Toggle ambient audio" aria-pressed="false">
-      <span id="listenLabel">▶ listen</span>
-    </button>
-  </header>
-
-  <main class="cv">
-    <div class="body">
-      <!-- ============== SIDEBAR ============== -->
-      <aside class="sidebar">
-        <section class="section">
-          <h2 class="section__title">Technical Skills</h2>
-
-          <div class="skill">
-            <div class="skill__label">Programming</div>
-            <div class="skill__value">Python, bash, HTML &amp; CSS</div>
-          </div>
-
-          <div class="skill">
-            <div class="skill__label">Data &amp; ML</div>
-            <div class="skill__value">
-              Computer vision for animal behavior, time-series analysis,
-              machine learning, image processing, statistical modelling of
-              neuronal time-series data
-            </div>
-          </div>
-
-          <div class="skill">
-            <div class="skill__label">Infrastructure</div>
-            <div class="skill__value">Linux/bash, HPC/SLURM, Docker, Git</div>
-          </div>
-
-          <div class="skill">
-            <div class="skill__label">AI &amp; Dev Tools</div>
-            <div class="skill__value">
-              Claude Code CLI (agentic coding), LLM-assisted development
-            </div>
-          </div>
-
-          <div class="skill">
-            <div class="skill__label">Audio &amp; Creative</div>
-            <div class="skill__value">
-              Cubase, audio signal processing, mixing, creative
-              coding for custom audio tools, projection mapping and custom
-              shader design for immersive events in Vienna
-            </div>
-          </div>
-
-          <div class="skill">
-            <div class="skill__label">Image &amp; Video</div>
-            <div class="skill__value">
-              Photoshop (image editing), Premiere and CapCut (video editing)
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section__title">Languages</h2>
-          <div class="lang"><b>German</b> — native</div>
-          <div class="lang"><b>English</b> — proficient (scientific &amp; professional)</div>
-        </section>
-      </aside>
-
-      <!-- ============== MAIN ============== -->
-      <div class="main">
-        <section class="section">
-          <h2 class="section__title">Profile</h2>
-          <p>
-            Neuroscientist (MSc, PhD candidate) in a computational neuroscience
-            lab, spending ~80% of my time on the technical backend: data
-            analysis pipelines, HPC workflows, and scientific tooling in Python
-            and bash. 3+ years implementing machine learning and computer
-            vision libraries for automated processing of animal behavior and
-            neuronal activity, alongside scientific computing workflows and
-            automation tools. Experienced with university cluster computing,
-            image processing, and statistical modelling. Complemented by a
-            formal IT &amp; Media Technology diploma (HTL, covering web
-            dev, software, and media production) and 15 years of music
-            production and audio engineering. Intrigued explorer of modern AI
-            workflows, with a thoughtful approach to implementing them into my
-            own work being aware of both their power and their limitations.
-          </p>
-          <p class="generalist">
-            <b>Technical generalist.</b> Much of my PhD consisted of
-            identifying the next computational problem and exploring the
-            newest tools to solve it — a generalist skill built on a broad
-            technical foundation. AI has since shifted the bottleneck: used
-            as a knowledge-browse and implementation layer, it collapses
-            the time to learn new skills. What's left —
-            framing the problem and choosing the cleanest approach — is
-            where a generalist background is strongest, and a skill that
-            has only grown more valuable with the rapid pace of recent AI
-            progress.
-          </p>
-        </section>
-
-        <section class="section">
-          <h2 class="section__title">Experience</h2>
-
-          <div class="entry">
-            <div class="entry__head">
-              <div class="entry__title">
-                PhD Researcher — Computational &amp; Experimental Neuroscience
-              </div>
-              <div class="entry__date">2021 — present</div>
-            </div>
-            <div class="entry__sub">
-              University of Vienna / Medical University of Vienna
-            </div>
-            <ul>
-              <li>Designed and maintained Python-based data analysis pipelines for behavior/neuronal recording datasets</li>
-              <li>Ran computational jobs on university HPC clusters (SLURM), managing batch processing of experimental data</li>
-              <li>Performed statistical modelling and visualization of complex biological data</li>
-              <li>Managed version-controlled codebases and reproducible analysis environments (Git, conda)</li>
-            </ul>
-          </div>
-
-          <div class="entry">
-            <div class="entry__head">
-              <div class="entry__title">
-                Master&rsquo;s Thesis — Computational Neuropharmacology
-              </div>
-              <div class="entry__date">2019 — 2021</div>
-            </div>
-            <div class="entry__sub">
-              Department of Pathobiology of the Nervous System, Medical
-              University of Vienna
-            </div>
-            <ul>
-              <li>Analysed electrophysiology data using custom Python scripts and GraphPad Prism for GABA receptor characterization</li>
-              <li>Performed molecular modelling with LigandScout software for receptor binding analysis</li>
-              <li>Processed and visualized large datasets from voltage-clamp recordings across multiple experimental conditions</li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section__title">Creative Practice</h2>
-
-          <div class="entry">
-            <div class="entry__head">
-              <div class="entry__title">
-                Music Production &amp; Audio Engineering
-              </div>
-              <div class="entry__date">2011 — present</div>
-            </div>
-            <div class="entry__sub">Independent</div>
-            <ul>
-              <li>15 years producing electronic music using Cubase and others, with deep knowledge of song writing, synthesis, and mixing</li>
-              <li>Audio signal processing and sound design — transferable DSP and signal analysis skills</li>
-              <li>Creative coding for custom audio processing tools used in my productions</li>
-            </ul>
-          </div>
-
-          <div class="entry">
-            <div class="entry__head">
-              <div class="entry__title">
-                Tohuwabohu — Co-founder
-              </div>
-              <div class="entry__date">2024 — present</div>
-            </div>
-            <div class="entry__sub">Creative collective, Vienna</div>
-            <ul>
-              <li>Lead projection mapping and decoration — design and build the projected visuals and physical installations for each event</li>
-              <li>Custom shader coding for projection-mapped visuals</li>
-              <li>Immersive events combining music, handcrafted visual design, and projection into a holistic sensory experience</li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section__title">Education</h2>
-
-          <div class="entry">
-            <div class="entry__head">
-              <div class="entry__title">PhD Candidate — Neuroscience</div>
-              <div class="entry__date">2021 — present</div>
-            </div>
-            <div class="entry__sub">
-              University of Vienna / Medical University of Vienna
-            </div>
-            <ul>
-              <li>Focus: computational analysis of neuronal circuits, Python-based data pipelines, HPC cluster computing</li>
-            </ul>
-          </div>
-
-          <div class="entry">
-            <div class="entry__head">
-              <div class="entry__title">
-                MSc Molecular Biology (Neuroscience)
-              </div>
-              <div class="entry__date">2014 — 2021</div>
-            </div>
-            <div class="entry__sub">University of Vienna</div>
-            <ul>
-              <li>Coursework in general molecular biology, data analysis (R, Python), proteomics, fluorescence microscopy, cell biology, and neuroscience</li>
-            </ul>
-          </div>
-
-          <div class="entry">
-            <div class="entry__head">
-              <div class="entry__title">
-                HTL Diploma — Information Technology / Media Technology
-              </div>
-              <div class="entry__date">2007 — 2013</div>
-            </div>
-            <div class="entry__sub">HTL Wien 3 Rennweg</div>
-            <ul>
-              <li>5-year technical diploma: programming fundamentals (HTML, CSS, JavaScript), media technology (Photoshop, Premiere / video production), software development, IT infrastructure</li>
-            </ul>
-          </div>
-        </section>
+      <div class="hero__main">
+        <h1 class="hero__name">Benjamin Schaar</h1>
+        <p class="hero__thesis">Writes pipelines, makes records, builds projected visuals.</p>
+        <p class="hero__sub">A <b>technical generalist</b> working across data, audio, and visual systems. Currently in a computational neuroscience lab in Vienna; building shaders and projection-mapped installations on the side.</p>
       </div>
-    </div>
+
+      <img class="hero__portrait" src="profile.png" alt="Benjamin Schaar — portrait" />
+
+      <div class="hero__bottom">
+        <span>Available for collaboration</span>
+        <span class="hero__scroll">
+          <span>Scroll</span>
+          <span class="arrow">↓</span>
+        </span>
+      </div>
+
+    </header>
+
+    <!-- =================== ABOUT =================== -->
+    <section class="section wrap" data-reveal>
+      <div class="section__head">
+        <div class="section__num">01 · About</div>
+        <h2 class="section__title">A generalist, by training and by trade.</h2>
+      </div>
+
+      <div class="section__body">
+        <div class="col">
+          <p class="about__lead">
+            The work runs across three current practices, built on a five-year IT and media technology diploma underneath all of it.
+          </p>
+          <div class="about__body">
+            <div>
+              <p>
+                Neuroscientist (MSc, PhD candidate) in a computational lab, spending ~80% of my time on the technical backend: Python data pipelines, HPC cluster workflows, statistical modelling, and computer vision libraries for behavior and neuronal-activity datasets. Three years of building scientific tooling, image processing, and reproducible analysis environments.
+              </p>
+              <p>
+                Fifteen years of electronic music production alongside it — songwriting, synthesis, DSP, and a long-running habit of writing custom audio tools when the off-the-shelf option doesn't fit.
+              </p>
+            </div>
+            <div>
+              <p class="accent">
+                Much of the PhD has consisted of identifying the next computational problem and exploring the newest tool to solve it.
+              </p>
+              <p>
+                AI has shifted the bottleneck rather than removed the work. Used as a knowledge-browse and implementation layer, it collapses the time to learn new skills, leaving what's left — framing the problem, picking the cleanest approach — exactly where a generalist background is strongest.
+              </p>
+              <p>
+                Co-founded <b>Tohuwabohu</b> in 2024, a small Vienna creative collective; lead the projection-mapping and shader work for the events.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMAGE MOMENT -->
+      <figure class="feature" data-reveal>
+        <div class="feature__img-wrap">
+          <img class="feature__img" src="assets/hero.jpg" alt="Editorial photograph: oxidized metal patina meeting dark slate, raked by warm light" loading="lazy" />
+        </div>
+        <figcaption class="feature__caption">
+          <span class="label">Plate 01</span>
+          <span>Material study · brass / slate / raking light · ref. for the page palette</span>
+        </figcaption>
+      </figure>
+    </section>
+
+    <!-- =================== DOMAINS =================== -->
+    <section class="section wrap" data-reveal>
+      <div class="section__head">
+        <div class="section__num">02 · Domains</div>
+        <h2 class="section__title">Three current practices.</h2>
+      </div>
+
+      <div class="section__body">
+        <div class="col">
+          <div class="domains__grid">
+            <article class="domain">
+              <span class="domain__years">2019 — present</span>
+              <h3 class="domain__title">Data &amp; Science</h3>
+              <p class="domain__body">
+                Python pipelines for behavior and neuronal-recording data, HPC/SLURM batch processing, statistical modelling, computer-vision libraries for animal behavior, image processing, reproducible analysis environments.
+              </p>
+              <p class="domain__tools">Python · bash · HPC/SLURM · Docker · Git · ML / CV</p>
+            </article>
+
+            <article class="domain">
+              <span class="domain__years">2011 — present</span>
+              <h3 class="domain__title">Music &amp; Audio</h3>
+              <p class="domain__body">
+                Fifteen years of electronic music production. Songwriting, synthesis, mixing, sound design. Audio DSP and custom signal-processing tools written when the existing options don't fit the work.
+              </p>
+              <p class="domain__tools">Cubase · DSP · synthesis · creative coding</p>
+            </article>
+
+            <article class="domain">
+              <span class="domain__years">2024 — present</span>
+              <h3 class="domain__title">Visual &amp; Spatial</h3>
+              <p class="domain__body">
+                Projection mapping, shader work, and built decoration for the Vienna creative collective <em>Tohuwabohu</em>. Immersive events combining music, hand-built physical installations, and projected visuals.
+              </p>
+              <p class="domain__tools">GLSL · projection mapping · physical build</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== SELECTED PROBLEMS =================== -->
+    <section class="section wrap" data-reveal>
+      <div class="section__head">
+        <div class="section__num">03 · Selected Problems</div>
+        <h2 class="section__title">From the lab: an automated worm-tracking pipeline.</h2>
+      </div>
+
+      <div class="section__body">
+        <div class="col">
+          <p class="pipeline__lead">
+            Quantifying <em>C. elegans</em> chemotaxis at scale: turning raw video into labelled behavior, automatically, across thousands of frames.
+          </p>
+
+          <div class="pipeline__strip">
+            <figure class="pipeline__step">
+              <div class="pipeline__panel"><img src="assets/pipeline/01-imaging.jpeg" alt="Top-down microscopy of a single C. elegans worm" loading="lazy" /></div>
+              <figcaption class="pipeline__cap">
+                <span class="pipeline__num">01</span>
+                <span class="pipeline__label">Imaging</span>
+              </figcaption>
+            </figure>
+            <figure class="pipeline__step">
+              <div class="pipeline__panel"><img src="assets/pipeline/02-segmentation.jpeg" alt="Segmentation mask of the worm body" loading="lazy" /></div>
+              <figcaption class="pipeline__cap">
+                <span class="pipeline__num">02</span>
+                <span class="pipeline__label">Segmentation</span>
+              </figcaption>
+            </figure>
+            <figure class="pipeline__step">
+              <div class="pipeline__panel"><img src="assets/pipeline/03-skeletonization.jpeg" alt="Skeleton centerline with body nodes" loading="lazy" /></div>
+              <figcaption class="pipeline__cap">
+                <span class="pipeline__num">03</span>
+                <span class="pipeline__label">Skeletonization</span>
+              </figcaption>
+            </figure>
+            <figure class="pipeline__step">
+              <div class="pipeline__panel"><img src="assets/pipeline/04-core-behaviors.jpeg" alt="Posture-derived motion direction vectors" loading="lazy" /></div>
+              <figcaption class="pipeline__cap">
+                <span class="pipeline__num">04</span>
+                <span class="pipeline__label">Core behaviors</span>
+              </figcaption>
+            </figure>
+            <figure class="pipeline__step">
+              <div class="pipeline__panel"><img src="assets/pipeline/05-chemotaxis-behaviors.jpeg" alt="Multi-step trajectory across a chemical gradient" loading="lazy" /></div>
+              <figcaption class="pipeline__cap">
+                <span class="pipeline__num">05</span>
+                <span class="pipeline__label">Chemotaxis behaviors</span>
+              </figcaption>
+            </figure>
+            <figure class="pipeline__step">
+              <div class="pipeline__panel"><img src="assets/pipeline/06-gradient-model.jpeg" alt="3D Gaussian concentration gradient" loading="lazy" /></div>
+              <figcaption class="pipeline__cap">
+                <span class="pipeline__num">06</span>
+                <span class="pipeline__label">Gradient model</span>
+              </figcaption>
+            </figure>
+          </div>
+
+          <div class="pipeline__body">
+            <p>
+              I combined <b>DeepLabCut</b> keypoint tracking with <b>SAM2</b> (run locally on its weights, no API), feeding the tracked body points as <b>visual point-prompts</b> to the segmentation model — so each frame is segmented without any clicks or text input.
+            </p>
+            <p>
+              Skeletonization on the resulting masks yields a posture per frame; <b>propagation of posture along the body</b> gives forward/reverse classification, which feeds into chemotaxis-level behaviors scored against a known concentration gradient.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== CATALOG =================== -->
+    <section class="section wrap" data-reveal>
+      <div class="section__head">
+        <div class="section__num">04 · Catalog</div>
+        <h2 class="section__title">Selected work, chronological.</h2>
+      </div>
+
+      <div class="section__body">
+        <div class="col">
+          <div class="catalog__list">
+
+            <article class="cat" data-reveal>
+              <span class="cat__year">2024 —</span>
+              <span class="cat__tag">Visual</span>
+              <div class="cat__main">
+                <h3 class="cat__title">Tohuwabohu</h3>
+                <p class="cat__sub">Creative collective, Vienna</p>
+                <div class="cat__desc">
+                  <ul>
+                    <li>Lead projection mapping and decoration: design and build the projected visuals and physical installations for each event</li>
+                    <li>Custom shader coding for projection-mapped visuals</li>
+                    <li>Immersive events combining music, handcrafted visual design, and projection into a holistic sensory experience</li>
+                  </ul>
+                </div>
+              </div>
+              <span class="cat__role">Co-founder</span>
+            </article>
+
+            <article class="cat" data-reveal>
+              <span class="cat__year">2021 —</span>
+              <span class="cat__tag">Data</span>
+              <div class="cat__main">
+                <h3 class="cat__title">Computational &amp; Experimental Neuroscience</h3>
+                <p class="cat__sub">University of Vienna / Medical University of Vienna</p>
+                <div class="cat__desc">
+                  <ul>
+                    <li>Designed and maintained Python-based data analysis pipelines for behavior / neuronal-recording datasets</li>
+                    <li>Ran computational jobs on university HPC clusters (SLURM), managing batch processing of experimental data</li>
+                    <li>Performed statistical modelling and visualization of complex biological data</li>
+                    <li>Managed version-controlled codebases and reproducible analysis environments (Git, conda)</li>
+                  </ul>
+                </div>
+              </div>
+              <span class="cat__role">PhD researcher</span>
+            </article>
+
+            <article class="cat" data-reveal>
+              <span class="cat__year">2019 — 2021</span>
+              <span class="cat__tag">Data</span>
+              <div class="cat__main">
+                <h3 class="cat__title">Computational Neuropharmacology</h3>
+                <p class="cat__sub">Department of Pathobiology of the Nervous System, MedUni Vienna</p>
+                <div class="cat__desc">
+                  <ul>
+                    <li>Analysed electrophysiology data with custom Python scripts and GraphPad Prism for GABA receptor characterization</li>
+                    <li>Performed molecular modelling with LigandScout for receptor-binding analysis</li>
+                    <li>Processed and visualized large datasets from voltage-clamp recordings across multiple experimental conditions</li>
+                  </ul>
+                </div>
+              </div>
+              <span class="cat__role">Master&rsquo;s thesis</span>
+            </article>
+
+            <article class="cat" data-reveal>
+              <span class="cat__year">2011 —</span>
+              <span class="cat__tag">Audio</span>
+              <div class="cat__main">
+                <h3 class="cat__title">Music Production &amp; Audio Engineering</h3>
+                <p class="cat__sub">Independent</p>
+                <div class="cat__desc">
+                  <ul>
+                    <li>Fifteen years producing electronic music in Cubase and others; deep working knowledge of songwriting, synthesis, and mixing</li>
+                    <li>Audio signal processing and sound design; transferable DSP and signal analysis skills</li>
+                    <li>Creative coding for custom audio processing tools used in productions</li>
+                  </ul>
+                </div>
+              </div>
+              <span class="cat__role">Independent practice</span>
+            </article>
+
+            <article class="cat" data-reveal>
+              <span class="cat__year">2014 — 2021</span>
+              <span class="cat__tag">Education</span>
+              <div class="cat__main">
+                <h3 class="cat__title">MSc Molecular Biology — Neuroscience</h3>
+                <p class="cat__sub">University of Vienna</p>
+                <div class="cat__desc">
+                  Coursework in molecular biology, data analysis (R, Python), proteomics, fluorescence microscopy, cell biology, neuroscience.
+                </div>
+              </div>
+              <span class="cat__role">MSc</span>
+            </article>
+
+            <article class="cat" data-reveal>
+              <span class="cat__year">2007 — 2013</span>
+              <span class="cat__tag">Education</span>
+              <div class="cat__main">
+                <h3 class="cat__title">HTL Diploma — Information Technology / Media Technology</h3>
+                <p class="cat__sub">HTL Wien 3 Rennweg</p>
+                <div class="cat__desc">
+                  Five-year technical diploma: programming fundamentals (HTML, CSS, JavaScript), media technology (Photoshop, Premiere, video production), software development, IT infrastructure.
+                </div>
+              </div>
+              <span class="cat__role">Foundation</span>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== STACK =================== -->
+    <section class="section wrap" data-reveal>
+      <div class="section__head">
+        <div class="section__num">05 · Stack</div>
+        <h2 class="section__title">Tools, instruments, languages.</h2>
+      </div>
+
+      <div class="section__body">
+        <div class="col">
+          <div class="stack__grid">
+            <div class="stack__cell">
+              <div class="stack__label">Programming</div>
+              <div class="stack__value">Python · bash · HTML &amp; CSS</div>
+            </div>
+            <div class="stack__cell">
+              <div class="stack__label">Data &amp; ML</div>
+              <div class="stack__value">Computer vision for animal behavior, time-series analysis, machine learning, image processing, statistical modelling of neuronal time-series data</div>
+            </div>
+            <div class="stack__cell">
+              <div class="stack__label">Infrastructure</div>
+              <div class="stack__value">Linux · bash · HPC / SLURM · Docker · Git</div>
+            </div>
+            <div class="stack__cell">
+              <div class="stack__label">AI &amp; Dev tools</div>
+              <div class="stack__value">Claude Code CLI (agentic coding), LLM-assisted development</div>
+            </div>
+            <div class="stack__cell">
+              <div class="stack__label">Audio &amp; Creative</div>
+              <div class="stack__value">Cubase · audio signal processing · mixing · creative coding for custom audio tools · projection mapping · custom shader design for immersive events</div>
+            </div>
+            <div class="stack__cell">
+              <div class="stack__label">Image &amp; Video</div>
+              <div class="stack__value">Photoshop (image editing) · Premiere &amp; CapCut (video editing)</div>
+            </div>
+
+            <div class="stack__lang">
+              <div class="stack__lang-line"><b>German</b> native</div>
+              <div class="stack__lang-line"><b>English</b> proficient (scientific &amp; professional)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== COLOPHON =================== -->
+    <section class="colophon wrap" data-reveal>
+      <div class="colophon__grid">
+        <div class="colophon__num">06 · Colophon</div>
+        <p class="colophon__copy">
+          Set in <em>Instrument Serif</em> and <em>Inter</em>. Built as a single static page; no framework, no tracker, no analytics. Vienna, <span style="white-space:nowrap">2026.</span>
+        </p>
+        <div class="colophon__meta">
+          Vienna · Austria<br />
+          Contact on request<br />
+          —<br />
+          <a href="https://github.com/BenjaminSchaar">GitHub</a>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <script>
+    /* ============================================================
+       Scroll reveal — IntersectionObserver, respects reduced motion
+       ============================================================ */
     (() => {
-      const canvas   = document.getElementById('signals');
-      const ctx      = canvas.getContext('2d');
-      const listenBtn   = document.getElementById('listenBtn');
-      const listenLabel = document.getElementById('listenLabel');
-      const hzEl    = document.getElementById('hzReadout');
-      const nodesEl = document.getElementById('nodeCount');
+      const els = document.querySelectorAll('[data-reveal]');
+      if (!('IntersectionObserver' in window) || !els.length) {
+        els.forEach(el => el.classList.add('is-visible'));
+        return;
+      }
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) {
+        els.forEach(el => el.classList.add('is-visible'));
+        return;
+      }
+      const obs = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        }
+      }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+      els.forEach(el => obs.observe(el));
+    })();
 
-      let width = 0, height = 0, dpr = 1;
-      let audioCtx = null;
-      let audioActive = false;
-      let nodes = [];
-      let photoNode = null;
-      let mouseX = -1e4, mouseY = -1e4;
-      let photoLoaded = false;
-      const photoImg = new Image();
-
-      // Phrygian scale, A2 base — matches reference "Signals"
-      const scale = [0, 1, 3, 5, 7, 8, 10];
-      const baseFreq = 110;
-
-      const noteToFreq = note => {
-        const octave = Math.floor(note / 7);
-        const deg = note % 7;
-        const semi = scale[deg] + octave * 12;
-        return baseFreq * Math.pow(2, semi / 12);
+    /* ============================================================
+       Hero name — subtle scroll-linked weight feel via opacity
+       (no layout-property animation, respects reduced motion)
+       ============================================================ */
+    (() => {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      const name = document.querySelector('.hero__name');
+      if (!name) return;
+      let frame = null;
+      const onScroll = () => {
+        if (frame) return;
+        frame = requestAnimationFrame(() => {
+          const y = window.scrollY;
+          const fade = Math.max(0, Math.min(1, 1 - y / 600));
+          name.style.opacity = (0.55 + fade * 0.45).toFixed(3);
+          frame = null;
+        });
       };
-
-      function resize() {
-        dpr = window.devicePixelRatio || 1;
-        const rect = canvas.getBoundingClientRect();
-        width  = rect.width;
-        height = rect.height;
-        canvas.width  = Math.floor(width  * dpr);
-        canvas.height = Math.floor(height * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        if (photoNode) {
-          const narrow = width < 720;
-          photoNode.x = narrow ? width / 2 : Math.min(190, Math.max(140, width * 0.18));
-          photoNode.y = narrow ? 105       : height * 0.5;
-          photoNode.radius = narrow ? 46 : 54;
-        }
-      }
-
-      class PhotoNode {
-        constructor() {
-          this.x = 0;
-          this.y = 0;
-          this.radius = 54;
-          this.pulsePhase = 0;
-          this.lastHit = 0;
-        }
-        update() {
-          this.pulsePhase += 0.014;
-        }
-        draw() {
-          const pulse = 1 + Math.sin(this.pulsePhase) * 0.035;
-          const r = this.radius * pulse;
-          const hitGlow = Math.max(0, 1 - (Date.now() - this.lastHit) / 900);
-
-          // Outer halo
-          const halo = ctx.createRadialGradient(this.x, this.y, r * 0.95, this.x, this.y, r * 2.6);
-          halo.addColorStop(0,   `rgba(138, 168, 200, ${0.22 + hitGlow * 0.28})`);
-          halo.addColorStop(0.55,`rgba(100, 130, 170, ${0.06 + hitGlow * 0.08})`);
-          halo.addColorStop(1,   'rgba(100, 130, 170, 0)');
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, r * 2.6, 0, Math.PI * 2);
-          ctx.fillStyle = halo;
-          ctx.fill();
-
-          // Photo (circular clip)
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
-          ctx.closePath();
-          ctx.clip();
-          if (photoLoaded) {
-            const size = r * 2;
-            // preserve aspect — photo is roughly square but we cover
-            const iw = photoImg.naturalWidth;
-            const ih = photoImg.naturalHeight;
-            const scale = Math.max(size / iw, size / ih);
-            const dw = iw * scale;
-            const dh = ih * scale;
-            ctx.drawImage(photoImg, this.x - dw / 2, this.y - dh / 2, dw, dh);
-          } else {
-            ctx.fillStyle = '#141b26';
-            ctx.fillRect(this.x - r, this.y - r, r * 2, r * 2);
-            ctx.fillStyle = '#8aa8c8';
-            ctx.font = '600 20px "JetBrains Mono", monospace';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('BS', this.x, this.y);
-          }
-          ctx.restore();
-
-          // Thin ring outline
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, r + 0.5, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(180, 205, 230, ${0.32 + hitGlow * 0.35})`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        }
-        onHit() { this.lastHit = Date.now(); }
-      }
-
-      class Node {
-        constructor(x, y) {
-          this.x = x;
-          this.y = y;
-          this.vx = (Math.random() - 0.5) * 0.5;
-          this.vy = (Math.random() - 0.5) * 0.5;
-          this.radius = 1.8 + Math.random() * 2.4;
-          this.note = Math.floor(Math.random() * 21);
-          this.pulsePhase = Math.random() * Math.PI * 2;
-          this.playing = false;
-          this.lastTrigger = 0;
-        }
-        update() {
-          this.x += this.vx;
-          this.y += this.vy;
-
-          // mouse attraction (only when mouse inside hero)
-          const mdx = mouseX - this.x;
-          const mdy = mouseY - this.y;
-          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-          if (mdist < 260 && mdist > 50) {
-            this.vx += mdx / mdist * 0.012;
-            this.vy += mdy / mdist * 0.012;
-          }
-
-          // photo gravity — gentle, distance-gated, with falloff
-          // Only pulls nodes within mid-range; strongest near orbit, zero at edge.
-          if (photoNode) {
-            const pdx = photoNode.x - this.x;
-            const pdy = photoNode.y - this.y;
-            const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
-            const orbitR = photoNode.radius + 32;
-            const gravityRange = 240;
-            if (pdist > orbitR && pdist < gravityRange) {
-              const strength = (1 - pdist / gravityRange) * 0.0015;
-              this.vx += pdx / pdist * strength;
-              this.vy += pdy / pdist * strength;
-            } else if (pdist < photoNode.radius + 10) {
-              // soft repulsion so they can't sit inside the photo
-              this.vx -= pdx / pdist * 0.09;
-              this.vy -= pdy / pdist * 0.09;
-            }
-          }
-
-          // ambient wander — keeps nodes from pooling in the photo attractor
-          this.vx += (Math.random() - 0.5) * 0.03;
-          this.vy += (Math.random() - 0.5) * 0.03;
-
-          // boundaries
-          if (this.x < 30) this.vx += 0.03;
-          if (this.x > width  - 30) this.vx -= 0.03;
-          if (this.y < 24) this.vy += 0.03;
-          if (this.y > height - 24) this.vy -= 0.03;
-
-          // damping (lighter so drift persists against the wander force)
-          this.vx *= 0.99;
-          this.vy *= 0.99;
-
-          this.pulsePhase += 0.02;
-        }
-        draw() {
-          const pulse = 1 + Math.sin(this.pulsePhase) * 0.35;
-          const r = this.radius * pulse;
-
-          const glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r * 4);
-          glow.addColorStop(0, this.playing
-            ? 'rgba(190, 215, 240, 0.5)'
-            : 'rgba(110, 140, 180, 0.22)');
-          glow.addColorStop(1, 'rgba(110, 140, 180, 0)');
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, r * 4, 0, Math.PI * 2);
-          ctx.fillStyle = glow;
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
-          ctx.fillStyle = this.playing
-            ? 'rgba(210, 225, 245, 0.95)'
-            : 'rgba(135, 160, 190, 0.68)';
-          ctx.fill();
-        }
-        trigger() {
-          if (!audioCtx || !audioActive) return;
-          if (Date.now() - this.lastTrigger < 120) return;
-          this.lastTrigger = Date.now();
-
-          const osc    = audioCtx.createOscillator();
-          const gain   = audioCtx.createGain();
-          const filter = audioCtx.createBiquadFilter();
-
-          osc.type = 'sine';
-          osc.frequency.value = noteToFreq(this.note);
-          filter.type = 'lowpass';
-          filter.frequency.value = 1800 + Math.random() * 2200;
-          filter.Q.value = 1;
-
-          const now = audioCtx.currentTime;
-          gain.gain.setValueAtTime(0, now);
-          gain.gain.linearRampToValueAtTime(0.06, now + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
-
-          osc.connect(filter);
-          filter.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start();
-          osc.stop(now + 1.8);
-
-          this.playing = true;
-          setTimeout(() => { this.playing = false; }, 220);
-
-          hzEl.textContent = Math.round(noteToFreq(this.note));
-        }
-      }
-
-      function init() {
-        photoNode = new PhotoNode();
-        nodes = [];
-        // denser around the right half so they drift into the text + back
-        const count = 34;
-        for (let i = 0; i < count; i++) {
-          nodes.push(new Node(
-            60 + Math.random() * (width  - 120),
-            30 + Math.random() * (height - 60),
-          ));
-        }
-        resize();
-      }
-
-      function drawConnections() {
-        const thr = 140;
-        const photoThr = 130;
-
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = i + 1; j < nodes.length; j++) {
-            const dx = nodes[i].x - nodes[j].x;
-            const dy = nodes[i].y - nodes[j].y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < thr) {
-              const alpha = (1 - dist / thr) * 0.22;
-              ctx.beginPath();
-              ctx.moveTo(nodes[i].x, nodes[i].y);
-              ctx.lineTo(nodes[j].x, nodes[j].y);
-              ctx.strokeStyle = `rgba(120, 150, 185, ${alpha})`;
-              ctx.lineWidth = 1;
-              ctx.stroke();
-
-              if (dist < 38 && audioActive && Math.random() < 0.008) {
-                nodes[Math.random() > 0.5 ? i : j].trigger();
-              }
-            }
-          }
-        }
-
-        if (photoNode) {
-          for (const n of nodes) {
-            const dx = photoNode.x - n.x;
-            const dy = photoNode.y - n.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            const edge = dist - photoNode.radius;
-            if (edge < photoThr && edge > 0) {
-              const alpha = (1 - edge / photoThr) * 0.55;
-              const ex = photoNode.x - (dx / dist) * photoNode.radius;
-              const ey = photoNode.y - (dy / dist) * photoNode.radius;
-              ctx.beginPath();
-              ctx.moveTo(n.x, n.y);
-              ctx.lineTo(ex, ey);
-              ctx.strokeStyle = `rgba(175, 205, 235, ${alpha})`;
-              ctx.lineWidth = 1;
-              ctx.stroke();
-
-              if (edge < 28 && audioActive && Math.random() < 0.018) {
-                n.trigger();
-                photoNode.onHit();
-              }
-            }
-          }
-        }
-      }
-
-      function frame() {
-        // subtle motion-blur / fade
-        ctx.fillStyle = 'rgba(6, 9, 16, 0.22)';
-        ctx.fillRect(0, 0, width, height);
-
-        drawConnections();
-        for (const n of nodes) { n.update(); n.draw(); }
-        photoNode && photoNode.update();
-        photoNode && photoNode.draw();
-
-        nodesEl.textContent = nodes.length;
-        requestAnimationFrame(frame);
-      }
-
-      // audio toggle
-      listenBtn.addEventListener('click', () => {
-        if (!audioCtx) {
-          try {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          } catch (e) { return; }
-        }
-        audioActive = !audioActive;
-        if (audioActive && audioCtx.state === 'suspended') audioCtx.resume();
-        listenBtn.classList.toggle('is-active', audioActive);
-        listenBtn.setAttribute('aria-pressed', String(audioActive));
-        listenLabel.textContent = audioActive ? '■ mute' : '▶ listen';
-        if (!audioActive) hzEl.textContent = '—';
-      });
-
-      // pointer tracking
-      canvas.addEventListener('mousemove', e => {
-        const r = canvas.getBoundingClientRect();
-        mouseX = e.clientX - r.left;
-        mouseY = e.clientY - r.top;
-      });
-      canvas.addEventListener('mouseleave', () => { mouseX = -1e4; mouseY = -1e4; });
-
-      // click anywhere on hero → spawn a node (unless on photo)
-      canvas.addEventListener('click', e => {
-        const r = canvas.getBoundingClientRect();
-        const x = e.clientX - r.left;
-        const y = e.clientY - r.top;
-        if (photoNode) {
-          const d = Math.hypot(photoNode.x - x, photoNode.y - y);
-          if (d < photoNode.radius + 16) return;
-        }
-        if (nodes.length >= 70) return;
-        const n = new Node(x, y);
-        nodes.push(n);
-        if (audioActive) n.trigger();
-      });
-
-      window.addEventListener('resize', resize);
-
-      // photo load
-      photoImg.onload  = () => { photoLoaded = true; };
-      photoImg.onerror = () => { photoLoaded = false; };
-      photoImg.src = 'profile.png';
-
-      // boot
-      resize();
-      init();
-      frame();
+      window.addEventListener('scroll', onScroll, { passive: true });
     })();
   </script>
 </body>
